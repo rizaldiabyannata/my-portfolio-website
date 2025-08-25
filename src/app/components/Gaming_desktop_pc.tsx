@@ -8,11 +8,19 @@ Source: https://sketchfab.com/3d-models/gaming-desktop-pc-d1d8282c9916438091f11a
 Title: Gaming Desktop PC
 */
 
-import React from 'react'
+import React, { ComponentProps } from 'react'
 import { useGLTF } from '@react-three/drei'
+// import { GroupProps } from '@react-three/fiber'
+import * as THREE from 'three'
+import { ThreeElements } from '@react-three/fiber'
 
-export function Model(props) {
-  const { nodes, materials } = useGLTF('/gaming_desktop_pc-transformed.glb')
+type GLTFResult = ReturnType<typeof useGLTF> & {
+  nodes: Record<string, THREE.Mesh>
+  materials: Record<string, THREE.Material>
+}
+
+export function Model(props: ComponentProps<'group'>) {
+  const { nodes, materials } = useGLTF('/gaming_desktop_pc-transformed.glb') as GLTFResult
   return (
     <group {...props} dispose={null}>
       <mesh geometry={nodes.Cube_Material_0.geometry} material={materials.Material} position={[-0.61, -0.006, 1.561]} rotation={[-Math.PI / 2, 0, -Math.PI]} scale={[-3.689, 7.316, 0.26]} />
