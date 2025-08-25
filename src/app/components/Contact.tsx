@@ -1,14 +1,20 @@
-
-import React from 'react';
-import SectionTitle from './SectionTitle';
+"use client";
+import React, { useState, useEffect } from 'react';
 
 const Contact: React.FC = () => {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => setIsMounted(true), 200);
+    return () => clearTimeout(timeout);
+  }, []);
+
   return (
-    <section id="contact" className="py-24 text-center max-w-2xl mx-auto" style={{ animation: 'fadeInUp 0.5s ease-out forwards', opacity: 0 }}>
-      <h2 className="text-brand font-mono text-lg mb-4">04. What’s Next?</h2>
+    <section id="contact" className={`py-24 text-center max-w-2xl mx-auto ${isMounted ? 'fade-in-up' : 'opacity-0'}`}>
+      <h2 className="text-brand font-mono text-lg mb-4">04. What&apos;s Next?</h2>
       <h3 className="text-4xl md:text-5xl font-bold text-lightest-slate mb-4">Get In Touch</h3>
       <p className="text-slate text-lg mb-10">
-        I'm actively seeking new opportunities and collaborations. My inbox is always open. Whether you have a question or just want to connect, feel free to reach out!
+        I&apos;m actively seeking new opportunities and collaborations. My inbox is always open. Whether you have a question or just want to connect, feel free to reach out!
       </p>
       <a
         href="mailto:aldizar255@gmail.com"

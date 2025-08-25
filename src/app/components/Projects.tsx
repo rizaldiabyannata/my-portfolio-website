@@ -1,10 +1,17 @@
-
-import React from 'react';
+"use client";
+import React, { useState, useEffect } from 'react';
 import { PROJECTS_DATA } from '../../../constants';
 import SectionTitle from './SectionTitle';
 import { FolderIcon, GithubIcon, ExternalLinkIcon } from './icons/UtilityIcons';
 
 const Projects: React.FC = () => {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => setIsMounted(true), 200);
+    return () => clearTimeout(timeout);
+  }, []);
+
   return (
     <section id="projects" className="py-24">
       <SectionTitle number="3" title="Things I've Built" />
@@ -12,8 +19,8 @@ const Projects: React.FC = () => {
         {PROJECTS_DATA.map((project, index) => (
           <div 
             key={project.title} 
-            className="bg-light-navy p-7 rounded-lg shadow-md flex flex-col justify-between hover:-translate-y-2 transition-transform duration-300"
-            style={{ animation: `fadeInUp 0.5s ease-out ${index * 0.15}s forwards`, opacity: 0 }}
+            className={`bg-light-navy p-7 rounded-lg shadow-md flex flex-col justify-between hover:-translate-y-2 transition-transform duration-300 ${isMounted ? 'fade-in-up' : 'opacity-0'}`}
+            style={{ animationDelay: `${index * 0.15}s` }}
           >
             <div>
               <div className="flex justify-between items-center mb-6">

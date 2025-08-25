@@ -1,15 +1,26 @@
-
-import React from 'react';
+"use client";
+import React, { useState, useEffect } from 'react';
 import { SKILLS_DATA } from '../../../constants';
 import SectionTitle from './SectionTitle';
 
 const Skills: React.FC = () => {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => setIsMounted(true), 200);
+    return () => clearTimeout(timeout);
+  }, []);
+
   return (
     <section id="skills" className="py-24">
       <SectionTitle number="2" title="My Skills" />
       <div className="space-y-12">
         {Object.entries(SKILLS_DATA).map(([category, skills], index) => (
-          <div key={category} style={{ animation: `fadeInUp 0.5s ease-out ${index * 0.2}s forwards`, opacity: 0 }}>
+          <div
+            key={category}
+            className={`${isMounted ? 'fade-in-up' : 'opacity-0'}`}
+            style={{ animationDelay: `${index * 0.2}s` }}
+          >
             <h3 className="text-xl font-bold text-lightest-slate mb-6">{category}</h3>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
               {skills.map((skill) => (
