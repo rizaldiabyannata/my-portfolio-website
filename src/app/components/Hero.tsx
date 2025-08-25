@@ -1,0 +1,28 @@
+import React from 'react';
+
+const Hero: React.FC = () => {
+  return (
+    <section className="min-h-screen flex items-center -mt-20">
+      <div className="container mx-auto px-6 md:px-12 lg:px-24 w-full text-white">
+        <div className="max-w-4xl" style={{ animation: 'fadeInUp 1s ease-out 0.2s forwards', opacity: 0 }}>
+          <h1 className="text-brand font-mono text-lg mb-4 text-white">Hi, my name is</h1>
+          <h2 className="text-4xl sm:text-6xl md:text-7xl font-bold text-lightest-slate mb-2">Rizaldi Abyannata.</h2>
+          <h3 className="text-4xl sm:text-5xl md:text-6xl font-bold text-light-slate mb-6">I build robust backends & dynamic frontends.</h3>
+          <p className="max-w-xl text-lg text-light-slate mb-8">
+            A proactive 7th-semester Informatics Engineering student with practical experience as a Full-Stack Developer. I specialize in building robust backend systems with Node.js and bringing ideas to life on the web.
+          </p>
+          <a href="#contact"
+             onClick={(e) => {
+               e.preventDefault();
+               document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' });
+             }}
+             className="inline-block font-mono text-brand border border-brand rounded px-8 py-4 text-lg hover:bg-brand/10 transition-all duration-300">
+            Get In Touch
+          </a>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Hero;
