@@ -1,10 +1,12 @@
 
 import React from 'react';
-import { GithubIcon, EmailIcon } from './icons/UtilityIcons';
+import { GithubIcon, EmailIcon, InstagramIcon, LinkedInIcon } from './icons/UtilityIcons';
 
 const socialLinks = [
   { href: 'https://github.com/rizaldiabyannata', icon: <GithubIcon /> },
-  { href: 'mailto:aldizar255@gmail.com', icon: <EmailIcon /> },
+  { href: 'https://www.linkedin.com/in/rizaldi-abyannata-1093571b5/', icon: <LinkedInIcon /> },
+  { href: 'https://www.instagram.com/abyannata___/', icon: <InstagramIcon /> },
+  { href: 'mailto:mail@rizaldiabyannata.dev', icon: <EmailIcon /> },
 ];
 
 const SocialLinks: React.FC = () => {
