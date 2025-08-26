@@ -7,31 +7,46 @@ const Header: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const headerRef = useRef(null);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    const timeout = setTimeout(() => setIsMounted(true), 200);
+    return () => clearTimeout(timeout);
+  }, []);
+
+  useEffect(() => {
+    if (!isMounted) return;
+
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
     };
     window.addEventListener('scroll', handleScroll);
 
-    gsap.from(headerRef.current, {
-      y: -100,
-      opacity: 0,
+    const headerElement = headerRef.current;
+    if (!headerElement) return;
+
+    gsap.set(headerElement, { y: -100, opacity: 0 });
+    gsap.set(".logo", { y: -20, opacity: 0 });
+    gsap.set(".nav-link", { y: -20, opacity: 0 });
+
+    gsap.to(headerElement, {
+      y: 0,
+      opacity: 1,
       duration: 1,
       ease: 'power3.out',
     });
 
-    gsap.from(".logo", {
-        y: -20,
-        opacity: 0,
+    gsap.to(".logo", {
+        y: 0,
+        opacity: 1,
         duration: 0.8,
         ease: 'power3.out',
         delay: 0.3
       });
 
-    gsap.from(".nav-link", {
-      y: -20,
-      opacity: 0,
+    gsap.to(".nav-link", {
+      y: 0,
+      opacity: 1,
       duration: 0.8,
       ease: 'power3.out',
       stagger: 0.1,
@@ -39,11 +54,14 @@ const Header: React.FC = () => {
     });
 
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [isMounted]);
   
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
-    document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+    const target = document.querySelector(href);
+    if (target) {
+        target.scrollIntoView({ behavior: 'smooth' });
+    }
     setIsMenuOpen(false);
   };
 

@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import SectionTitle from './SectionTitle';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -8,12 +8,23 @@ gsap.registerPlugin(ScrollTrigger);
 
 const About: React.FC = () => {
   const sectionRef = useRef<HTMLElement>(null);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    const timeout = setTimeout(() => setIsMounted(true), 200);
+    return () => clearTimeout(timeout);
+  }, []);
+
+  useEffect(() => {
+    if (!isMounted) return;
+
     const el = sectionRef.current;
     if (!el) return;
+
     const title = el.querySelector('.section-title');
-    const paragraphs = el.querySelectorAll('p');
+    const paragraphs = gsap.utils.toArray<HTMLElement>(el.querySelectorAll('p'));
+
+    gsap.set([title, ...paragraphs], { autoAlpha: 0 });
 
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -24,20 +35,24 @@ const About: React.FC = () => {
       }
     });
 
-    tl.from(title, {
-      opacity: 0,
-      y: -50,
-      duration: 1,
-      ease: 'power3.out'
-    }).from(paragraphs, {
-      opacity: 0,
-      y: 20,
+    if (title) {
+        tl.to(title, {
+            autoAlpha: 1,
+            y: 0,
+            duration: 1,
+            ease: 'power3.out'
+        });
+    }
+
+    tl.to(paragraphs, {
+      autoAlpha: 1,
+      y: 0,
       stagger: 0.2,
       duration: 0.8,
       ease: 'power3.out'
     }, "-=0.5");
 
-  }, []);
+  }, [isMounted]);
 
   return (
     <section id="about" ref={sectionRef} className="py-24">

@@ -4,7 +4,7 @@ Command: npx gltfjsx@6.5.3 public/model/Avatar.glb -o src/app/components/Avatar.
 */
 
 import * as THREE from 'three'
-import React, { JSX, useEffect, useRef } from 'react'
+import React, { JSX, useEffect, useRef, useState } from 'react'
 import { useGraph } from '@react-three/fiber'
 import { useAnimations, useFBX, useGLTF } from '@react-three/drei'
 import { GLTF, SkeletonUtils } from 'three-stdlib'
@@ -33,7 +33,6 @@ type GLTFResult = GLTF & {
     Wolf3D_Skin: THREE.MeshStandardMaterial
     Wolf3D_Teeth: THREE.MeshStandardMaterial
   }
-  // animations: GLTFAction[] // Removed because GLTFAction is not defined and animations are not used
 }
 
 const AvatarComponent = (props: JSX.IntrinsicElements['group']) => {
@@ -43,13 +42,11 @@ const AvatarComponent = (props: JSX.IntrinsicElements['group']) => {
   const {animations: breathingAnimation} = useFBX("/animations/Breathing Idle.fbx")
   const {animations: sadAnimation} = useFBX("/animations/Sad Idle.fbx")
 
-  // Pastikan animasi ada sebelum set nama
   if (saluteAnimation[0]) saluteAnimation[0].name = "Salute"
   if (dancingAnimation[0]) dancingAnimation[0].name = "Silly Dancing"
   if (breathingAnimation[0]) breathingAnimation[0].name = "Breathing Idle"
   if (sadAnimation[0]) sadAnimation[0].name = "Sad Idle"
 
-  // List animasi selain "Breathing Idle"
   const animationsList = [
     saluteAnimation[0]?.name,
     dancingAnimation[0]?.name,
@@ -68,28 +65,36 @@ const AvatarComponent = (props: JSX.IntrinsicElements['group']) => {
   );
 
   const currentAnimation = useRef('Breathing Idle');
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    if (group.current) {
-      gsap.from(group.current.scale, {
-        x: 0,
-        y: 0,
-        z: 0,
-        duration: 1,
-        ease: 'power3.out',
-        delay: 1,
-      });
-      gsap.from(group.current.position, {
-        y: -1,
-        duration: 1,
-        ease: 'power3.out',
-        delay: 1,
-      });
-    }
+    const timeout = setTimeout(() => setIsMounted(true), 200);
+    return () => clearTimeout(timeout);
+  }, []);
+
+  useEffect(() => {
+    if (!isMounted || !group.current) return;
+
+    gsap.set(group.current.scale, { x: 0, y: 0, z: 0 });
+    gsap.set(group.current.position, { y: -1 });
+
+    gsap.to(group.current.scale, {
+      x: 1,
+      y: 1,
+      z: 1,
+      duration: 1,
+      ease: 'power3.out',
+      delay: 1,
+    });
+    gsap.to(group.current.position, {
+      y: 0,
+      duration: 1,
+      ease: 'power3.out',
+      delay: 1,
+    });
 
     if (!actions || Object.keys(actions).length === 0) return;
 
-    // Play the initial animation
     actions['Breathing Idle']?.play();
 
     let timeout: NodeJS.Timeout;
@@ -105,23 +110,21 @@ const AvatarComponent = (props: JSX.IntrinsicElements['group']) => {
       const newAction = actions[newAnimationName];
 
       if (oldAction && newAction) {
-        // Smoothly transition from the old animation to the new one
         newAction.reset().play();
         oldAction.crossFadeTo(newAction, 0.5, true);
         currentAnimation.current = newAnimationName;
       }
 
-      timeout = setTimeout(switchAnimation, 10000); // Switch every 10 seconds
+      timeout = setTimeout(switchAnimation, 10000);
     };
 
     timeout = setTimeout(switchAnimation, 10000);
 
     return () => {
       clearTimeout(timeout);
-      // Optional: fade out all actions on unmount
       Object.values(actions).forEach((action) => action?.fadeOut(0.5));
     };
-  }, [actions, animationsList]);
+  }, [isMounted, actions, animationsList]);
 
   const clone = React.useMemo(() => SkeletonUtils.clone(scene), [scene])
   const { nodes, materials } = useGraph(clone as THREE.Object3D) as unknown as GLTFResult

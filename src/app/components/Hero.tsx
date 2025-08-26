@@ -1,20 +1,38 @@
 "use client";
-import React, { useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import CanvasScene from './Canvas';
 import { gsap } from 'gsap';
 
 const Hero: React.FC = () => {
     const heroRef = useRef(null);
+    const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {
+        const timeout = setTimeout(() => setIsMounted(true), 200);
+        return () => clearTimeout(timeout);
+    }, []);
+
+    useEffect(() => {
+        if (!isMounted) return;
+
+        const heroElements = [
+            ".hero-title",
+            ".hero-name",
+            ".hero-subtitle",
+            ".hero-description",
+            ".hero-button"
+        ];
+
+        gsap.set(heroElements, { opacity: 0, y: 20 });
+
         const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
-        tl.from(".hero-title", { opacity: 0, y: 20, duration: 0.8, delay: 0.2 })
-          .from(".hero-name", { opacity: 0, y: 20, duration: 0.8 }, "-=0.6")
-          .from(".hero-subtitle", { opacity: 0, y: 20, duration: 0.8 }, "-=0.6")
-          .from(".hero-description", { opacity: 0, y: 20, duration: 0.8 }, "-=0.6")
-          .from(".hero-button", { opacity: 0, y: 20, duration: 0.8 }, "-=0.6");
-    }, []);
+        tl.to(".hero-title", { opacity: 1, y: 0, duration: 0.8, delay: 0.2 })
+          .to(".hero-name", { opacity: 1, y: 0, duration: 0.8 }, "-=0.6")
+          .to(".hero-subtitle", { opacity: 1, y: 0, duration: 0.8 }, "-=0.6")
+          .to(".hero-description", { opacity: 1, y: 0, duration: 0.8 }, "-=0.6")
+          .to(".hero-button", { opacity: 1, y: 0, duration: 0.8 }, "-=0.6");
+    }, [isMounted]);
 
   return (
     <section ref={heroRef} className="min-h-screen flex items-center -mt-20">
@@ -30,7 +48,10 @@ const Hero: React.FC = () => {
             <a href="#contact"
                onClick={(e) => {
                  e.preventDefault();
-                 document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' });
+                 const contactEl = document.querySelector('#contact');
+                 if (contactEl) {
+                    contactEl.scrollIntoView({ behavior: 'smooth' });
+                 }
                }}
                className="hero-button inline-block font-mono text-brand border border-brand rounded px-8 py-4 text-lg hover:bg-brand/10 transition-all duration-300">
               Get In Touch
