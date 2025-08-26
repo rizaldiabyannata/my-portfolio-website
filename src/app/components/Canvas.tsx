@@ -70,8 +70,8 @@ const CanvasScene = () => {
         </mesh>
 
         <Avatar
-          position={[0, -4, 0]}
-          scale={3.5}
+          position={[0, -3.7, 0]}
+          scale={3.2}
           rotation={[0, Math.PI / 2.2, 0]}
           castShadow
         />

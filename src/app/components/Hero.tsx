@@ -14,7 +14,7 @@ const Hero: React.FC = () => {
     <section className="min-h-screen flex items-center -mt-20">
       <div className="container mx-auto px-6 md:px-12 lg:px-24 w-full">
         <div className="flex flex-col md:flex-row items-center justify-center w-full">
-          <div className={`w-full md:w-1/2 ${isMounted ? 'fade-in-up' : 'opacity-0'}`} style={{ animationDelay: '0.2s' }}>
+          <div className={`w-full mt-40 md:w-1/2 ${isMounted ? 'fade-in-up' : 'opacity-0'}`} style={{ animationDelay: '0.2s' }}>
             <h1 className="text-brand font-mono text-lg mb-4">Hi, my name is</h1>
             <h2 className="text-4xl sm:text-6xl md:text-7xl font-bold text-lightest-slate mb-2">Rizaldi Abyannata.</h2>
             <h3 className="text-4xl sm:text-5xl md:text-6xl font-bold text-light-slate mb-6">I build robust backends & dynamic frontends.</h3>
