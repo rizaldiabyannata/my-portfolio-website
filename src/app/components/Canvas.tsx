@@ -63,10 +63,10 @@ const CanvasScene = () => {
           castShadow
           shadow-mapSize={1024}
         />
-        {/* Shadow ground plane */}
-        <mesh receiveShadow position={[0, -7.5, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        {/* Floor plane */}
+        <mesh receiveShadow position={[0, -3.7, 0]} rotation={[-Math.PI / 2, 0, 0]}>
           <planeGeometry args={[6, 6]} />
-          <shadowMaterial transparent opacity={0.4} />
+          <meshStandardMaterial color="#444" />
         </mesh>
 
         <Avatar
