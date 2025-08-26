@@ -15,7 +15,7 @@ const About: React.FC = () => {
       <SectionTitle number="1" title="About Me" />
       <div className="max-w-3xl space-y-4 text-slate text-lg">
         <p>
-          Hello! I&apos;m Rizaldi, a proactive and disciplined 6th-semester Informatics Engineering student at Universitas Mataram (expected graduation in 2026), with practical experience as a Full-Stack Developer.
+          Hello! I&apos;m Rizaldi, a proactive and disciplined 7th-semester Informatics Engineering student at Universitas Mataram (expected graduation in 2026), with practical experience as a Full-Stack Developer.
         </p>
         <p>
           I am skilled in building robust backend systems using Node.js (with Express.js and Bun.js) and developing dynamic frontend interfaces with technologies like Vue.js, React.js, and Next.js. My expertise also includes Docker, RESTful API integration, and database management with MySQL and MongoDB.
