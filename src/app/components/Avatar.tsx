@@ -4,7 +4,7 @@ Command: npx gltfjsx@6.5.3 public/model/Avatar.glb -o src/app/components/Avatar.
 */
 
 import * as THREE from 'three'
-import React, { JSX, useEffect, useRef, useState } from 'react'
+import React, { JSX, useEffect, useRef } from 'react'
 import { useGraph } from '@react-three/fiber'
 import { useAnimations, useFBX, useGLTF } from '@react-three/drei'
 import { GLTF, SkeletonUtils } from 'three-stdlib'
@@ -55,50 +55,55 @@ const AvatarComponent = (props: JSX.IntrinsicElements['group']) => {
     sadAnimation[0]?.name
   ].filter(Boolean) as string[];
 
-  const [animation, setAnimation] = useState('Breathing Idle');
-  const [isBreathing, setIsBreathing] = useState(true);
-
   const group = useRef<THREE.Group>(null);
-  const {actions} = useAnimations([
-    saluteAnimation[0],
-    dancingAnimation[0],
-    breathingAnimation[0],
-    sadAnimation[0]
-  ].filter(Boolean), group);
+  const { actions } = useAnimations(
+    [
+      saluteAnimation[0],
+      dancingAnimation[0],
+      breathingAnimation[0],
+      sadAnimation[0],
+    ].filter(Boolean),
+    group
+  );
+
+  const currentAnimation = useRef('Breathing Idle');
 
   useEffect(() => {
-    actions[animation]?.fadeIn(0.1).play();
-    return () => {
-      actions[animation]?.fadeOut(0.1);
+    if (!actions || Object.keys(actions).length === 0) return;
+
+    // Play the initial animation
+    actions['Breathing Idle']?.play();
+
+    let timeout: NodeJS.Timeout;
+
+    const switchAnimation = () => {
+      const oldAnimationName = currentAnimation.current;
+      const newAnimationName =
+        oldAnimationName === 'Breathing Idle'
+          ? animationsList[Math.floor(Math.random() * animationsList.length)]
+          : 'Breathing Idle';
+
+      const oldAction = actions[oldAnimationName];
+      const newAction = actions[newAnimationName];
+
+      if (oldAction && newAction) {
+        // Smoothly transition from the old animation to the new one
+        newAction.reset().play();
+        oldAction.crossFadeTo(newAction, 0.5, true);
+        currentAnimation.current = newAnimationName;
+      }
+
+      timeout = setTimeout(switchAnimation, 10000); // Switch every 10 seconds
     };
-  }, [animation, actions]);
 
-useEffect(() => {
-  if (animationsList.length === 0) return;
-  let timeout: NodeJS.Timeout | null = null;
-  let nextAnim = "Breathing Idle";
+    timeout = setTimeout(switchAnimation, 10000);
 
-  const switchAnimation = () => {
-    const current = nextAnim;
-    if (current === "Breathing Idle") {
-      nextAnim = animationsList[Math.floor(Math.random() * animationsList.length)];
-    } else {
-      nextAnim = "Breathing Idle";
-    }
-    // Fade out current, fade in next
-    actions[current]?.fadeOut(0.5);
-    setTimeout(() => {
-      setAnimation(nextAnim);
-      actions[nextAnim]?.fadeIn(0.5).play();
-    }, 500); // 0.5s fade out, lalu ganti animasi
-    timeout = setTimeout(switchAnimation, 10000); // Ganti animasi setiap 10 detik
-  };
-
-  timeout = setTimeout(switchAnimation, 10000);
-  return () => {
-    if (timeout) clearTimeout(timeout);
-  };
-}, [animationsList.join(","), actions]);
+    return () => {
+      clearTimeout(timeout);
+      // Optional: fade out all actions on unmount
+      Object.values(actions).forEach((action) => action?.fadeOut(0.5));
+    };
+  }, [actions, animationsList]);
 
   const clone = React.useMemo(() => SkeletonUtils.clone(scene), [scene])
   const { nodes, materials } = useGraph(clone as THREE.Object3D) as unknown as GLTFResult

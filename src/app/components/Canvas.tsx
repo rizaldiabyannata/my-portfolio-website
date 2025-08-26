@@ -39,10 +39,10 @@ const CanvasScene = () => {
     <Canvas
       frameloop="always"
       shadows={true}
-      dpr={1}
-      camera={{ position: [20, 5, 5], fov: 25 }}
+      dpr={[1, 2]}
+      camera={{ position: [20, 3, 5], fov: 25, zoom: 1.2 }}
       gl={{ preserveDrawingBuffer: true, powerPreference: "high-performance" }}
-      style={{ width: "45vw", height: "100vh" }}
+      className="w-full h-full"
     >
       <Suspense fallback={<Html center>Loading...</Html>}>
         <hemisphereLight intensity={1.5} groundColor="#222" />

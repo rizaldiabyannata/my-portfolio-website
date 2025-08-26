@@ -30,7 +30,7 @@ const Hero: React.FC = () => {
               Get In Touch
             </a>
           </div>
-          <div className="w-full md:w-1/2 h-[50vh] md:h-screen">
+          <div className="w-full md:w-1/2 h-[50vh] md:h-[80vh] flex items-center justify-center">
             <CanvasScene />
           </div>
         </div>
