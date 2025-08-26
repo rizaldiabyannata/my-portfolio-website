@@ -9,7 +9,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 
 const Projects: React.FC = () => {
-  const sectionRef = useRef<HTMLOptionElement>(null);
+  const sectionRef = useRef<HTMLElement | null>(null);
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {

@@ -79,15 +79,17 @@ const AvatarComponent = (props: JSX.IntrinsicElements['group']) => {
     gsap.set(group.current.position, { y: -1 });
 
     gsap.to(group.current.scale, {
-      x: 1,
-      y: 1,
-      z: 1,
+      x: 3.2,
+      y: 3.2,
+      z: 3.2,
       duration: 1,
       ease: 'power3.out',
       delay: 1,
     });
     gsap.to(group.current.position, {
-      y: 0,
+      y: -4,
+      z: -1,
+      x: -2,
       duration: 1,
       ease: 'power3.out',
       delay: 1,
