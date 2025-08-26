@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -7,24 +7,36 @@ gsap.registerPlugin(ScrollTrigger);
 
 const Contact: React.FC = () => {
   const sectionRef = useRef(null);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    const el = sectionRef.current;
-    const children = Array.from(el.children);
+    const timeout = setTimeout(() => setIsMounted(true), 200);
+    return () => clearTimeout(timeout);
+  }, []);
 
-    gsap.from(children, {
+  useEffect(() => {
+    if (!isMounted) return;
+
+    const el = sectionRef.current;
+    if (!el) return;
+
+    const children = gsap.utils.toArray<HTMLElement>(el.children);
+
+    gsap.set(children, { autoAlpha: 0, y: 20 });
+
+    gsap.to(children, {
       scrollTrigger: {
         trigger: el,
         start: 'top 80%',
         toggleActions: 'play none none none'
       },
-      opacity: 0,
-      y: 20,
+      autoAlpha: 1,
+      y: 0,
       stagger: 0.2,
       duration: 0.8,
       ease: 'power3.out'
     });
-  }, []);
+  }, [isMounted]);
 
   return (
     <section id="contact" ref={sectionRef} className="py-24 text-center max-w-2xl mx-auto">

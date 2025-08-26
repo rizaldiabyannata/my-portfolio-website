@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { PROJECTS_DATA } from '../../../constants';
 import SectionTitle from './SectionTitle';
 import { FolderIcon, GithubIcon, ExternalLinkIcon } from './icons/UtilityIcons';
@@ -10,11 +10,23 @@ gsap.registerPlugin(ScrollTrigger);
 
 const Projects: React.FC = () => {
   const sectionRef = useRef(null);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    const timeout = setTimeout(() => setIsMounted(true), 200);
+    return () => clearTimeout(timeout);
+  }, []);
+
+  useEffect(() => {
+    if (!isMounted) return;
+
     const el = sectionRef.current;
+    if (!el) return;
+
     const title = el.querySelector('.section-title');
-    const projectCards = el.querySelectorAll('.project-card');
+    const projectCards = gsap.utils.toArray<HTMLElement>(".project-card");
+
+    gsap.set(projectCards, { autoAlpha: 0, y: 20 });
 
     const tl = gsap.timeline({
         scrollTrigger: {
@@ -24,14 +36,18 @@ const Projects: React.FC = () => {
         }
     });
 
-    tl.from(title, {
-      opacity: 0,
-      y: -50,
-      duration: 1,
-      ease: 'power3.out'
-    }).from(projectCards, {
-        autoAlpha: 0,
-        y: 20,
+    if (title) {
+      tl.from(title, {
+        opacity: 0,
+        y: -50,
+        duration: 1,
+        ease: 'power3.out'
+      });
+    }
+
+    tl.to(projectCards, {
+        autoAlpha: 1,
+        y: 0,
         stagger: 0.2,
         duration: 0.8,
         ease: 'power3.out'
@@ -46,7 +62,7 @@ const Projects: React.FC = () => {
         });
     });
 
-  }, []);
+  }, [isMounted]);
 
   return (
     <section id="projects" ref={sectionRef} className="py-24">
@@ -57,7 +73,7 @@ const Projects: React.FC = () => {
         {PROJECTS_DATA.map((project, index) => (
           <div
             key={project.title}
-            className="project-card bg-light-navy p-7 rounded-lg shadow-md flex flex-col justify-between transition-transform duration-300 invisible"
+            className="project-card bg-light-navy p-7 rounded-lg shadow-md flex flex-col justify-between transition-transform duration-300"
           >
             <div>
               <div className="flex justify-between items-center mb-6">

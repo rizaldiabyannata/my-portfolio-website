@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { SKILLS_DATA } from '../../../constants';
 import SectionTitle from './SectionTitle';
 import { gsap } from 'gsap';
@@ -9,11 +9,21 @@ gsap.registerPlugin(ScrollTrigger);
 
 const Skills: React.FC = () => {
   const sectionRef = useRef(null);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    const timeout = setTimeout(() => setIsMounted(true), 200);
+    return () => clearTimeout(timeout);
+  }, []);
+
+  useEffect(() => {
+    if (!isMounted) return;
+
     const el = sectionRef.current;
+    if (!el) return;
+
     const title = el.querySelector('.section-title');
-    const skillCategories = el.querySelectorAll('.skill-category');
+    gsap.set(title, { autoAlpha: 0, y: -50 });
 
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -23,16 +33,21 @@ const Skills: React.FC = () => {
       }
     });
 
-    tl.from(title, {
-      opacity: 0,
-      y: -50,
-      duration: 1,
-      ease: 'power3.out'
-    });
+    if (title) {
+        tl.to(title, {
+            autoAlpha: 1,
+            y: 0,
+            duration: 1,
+            ease: 'power3.out'
+        });
+    }
 
+    const skillCategories = gsap.utils.toArray<HTMLElement>('.skill-category');
     skillCategories.forEach(category => {
       const categoryTitle = category.querySelector('h3');
-      const skills = category.querySelectorAll('.skill-item');
+      const skills = gsap.utils.toArray<HTMLElement>(category.querySelectorAll('.skill-item'));
+
+      gsap.set([categoryTitle, ...skills], { autoAlpha: 0 });
 
       const categoryTl = gsap.timeline({
         scrollTrigger: {
@@ -42,22 +57,26 @@ const Skills: React.FC = () => {
         }
       });
 
-      categoryTl.from(categoryTitle, {
-        opacity: 0,
-        y: -30,
-        duration: 0.8,
-        ease: 'power3.out'
-      }).from(skills, {
-        opacity: 0,
-        y: 20,
-        scale: 0.9,
+      if(categoryTitle) {
+          categoryTl.to(categoryTitle, {
+            autoAlpha: 1,
+            y: 0,
+            duration: 0.8,
+            ease: 'power3.out'
+          });
+      }
+
+      categoryTl.to(skills, {
+        autoAlpha: 1,
+        y: 0,
+        scale: 1,
         stagger: 0.1,
         duration: 0.5,
         ease: 'power3.out'
       }, "-=0.5");
     });
 
-  }, []);
+  }, [isMounted]);
 
   return (
     <section id="skills" ref={sectionRef} className="py-24">

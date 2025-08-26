@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { GithubIcon, EmailIcon, InstagramIcon, LinkedInIcon } from './icons/UtilityIcons';
 import { gsap } from 'gsap';
 
@@ -12,25 +12,39 @@ const socialLinks = [
 
 const SocialLinks: React.FC = () => {
     const socialLinksRef = useRef(null);
+    const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {
-        gsap.from(socialLinksRef.current, {
-            opacity: 0,
-            y: 20,
+        const timeout = setTimeout(() => setIsMounted(true), 200);
+        return () => clearTimeout(timeout);
+    }, []);
+
+    useEffect(() => {
+        if (!isMounted) return;
+
+        const el = socialLinksRef.current;
+        if (!el) return;
+
+        gsap.set(el, { opacity: 0, y: 20 });
+        gsap.set(".social-link", { opacity: 0, y: 10 });
+
+        gsap.to(el, {
+            opacity: 1,
+            y: 0,
             duration: 1,
             ease: 'power3.out',
             delay: 1,
         });
 
-        gsap.from(".social-link", {
-            opacity: 0,
-            y: 10,
+        gsap.to(".social-link", {
+            opacity: 1,
+            y: 0,
             duration: 0.5,
             ease: 'power3.out',
             stagger: 0.1,
             delay: 1.2,
         });
-    }, []);
+    }, [isMounted]);
 
   return (
     <div ref={socialLinksRef} className="hidden md:block fixed bottom-0 left-12 z-10">
