@@ -8,6 +8,7 @@ import React, { JSX, useEffect, useRef } from 'react'
 import { useGraph } from '@react-three/fiber'
 import { useAnimations, useFBX, useGLTF } from '@react-three/drei'
 import { GLTF, SkeletonUtils } from 'three-stdlib'
+import { gsap } from 'gsap'
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -69,6 +70,23 @@ const AvatarComponent = (props: JSX.IntrinsicElements['group']) => {
   const currentAnimation = useRef('Breathing Idle');
 
   useEffect(() => {
+    if (group.current) {
+      gsap.from(group.current.scale, {
+        x: 0,
+        y: 0,
+        z: 0,
+        duration: 1,
+        ease: 'power3.out',
+        delay: 1,
+      });
+      gsap.from(group.current.position, {
+        y: -1,
+        duration: 1,
+        ease: 'power3.out',
+        delay: 1,
+      });
+    }
+
     if (!actions || Object.keys(actions).length === 0) return;
 
     // Play the initial animation

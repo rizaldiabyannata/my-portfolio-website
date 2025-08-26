@@ -1,16 +1,33 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const Contact: React.FC = () => {
-  const [isMounted, setIsMounted] = useState(false);
+  const sectionRef = useRef(null);
 
   useEffect(() => {
-    const timeout = setTimeout(() => setIsMounted(true), 200);
-    return () => clearTimeout(timeout);
+    const el = sectionRef.current;
+    const children = Array.from(el.children);
+
+    gsap.from(children, {
+      scrollTrigger: {
+        trigger: el,
+        start: 'top 80%',
+        toggleActions: 'play none none none'
+      },
+      opacity: 0,
+      y: 20,
+      stagger: 0.2,
+      duration: 0.8,
+      ease: 'power3.out'
+    });
   }, []);
 
   return (
-    <section id="contact" className={`py-24 text-center max-w-2xl mx-auto ${isMounted ? 'fade-in-up' : 'opacity-0'}`}>
+    <section id="contact" ref={sectionRef} className="py-24 text-center max-w-2xl mx-auto">
       <h2 className="text-brand font-mono text-lg mb-4">04. What&apos;s Next?</h2>
       <h3 className="text-4xl md:text-5xl font-bold text-lightest-slate mb-4">Get In Touch</h3>
       <p className="text-slate text-lg mb-10">

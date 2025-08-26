@@ -1,16 +1,43 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { NAV_LINKS } from '../../../constants';
+import { gsap } from 'gsap';
 
 const Header: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const headerRef = useRef(null);
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
     };
     window.addEventListener('scroll', handleScroll);
+
+    gsap.from(headerRef.current, {
+      y: -100,
+      opacity: 0,
+      duration: 1,
+      ease: 'power3.out',
+    });
+
+    gsap.from(".logo", {
+        y: -20,
+        opacity: 0,
+        duration: 0.8,
+        ease: 'power3.out',
+        delay: 0.3
+      });
+
+    gsap.from(".nav-link", {
+      y: -20,
+      opacity: 0,
+      duration: 0.8,
+      ease: 'power3.out',
+      stagger: 0.1,
+      delay: 0.5
+    });
+
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
   
@@ -21,9 +48,9 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-light-navy/80 shadow-lg backdrop-blur-sm' : ''}`}>
+    <header ref={headerRef} className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-light-navy/80 shadow-lg backdrop-blur-sm' : ''}`}>
       <nav className="container mx-auto px-6 md:px-12 lg:px-24 flex items-center justify-between h-20">
-        <div className="text-brand text-2xl font-mono font-bold transition-transform duration-300 hover:scale-110">
+        <div className="logo text-brand text-2xl font-mono font-bold transition-transform duration-300 hover:scale-110">
           <a href="#">RA</a>
         </div>
         
@@ -33,13 +60,12 @@ const Header: React.FC = () => {
               key={link.name} 
               href={link.href} 
               onClick={(e) => handleLinkClick(e, link.href)}
-              className="text-lightest-slate font-mono hover:text-brand transition-colors duration-300"
-              style={{ animation: `fadeInUp 0.5s ease-out ${index * 0.1 + 0.5}s forwards`, opacity: 0 }}
+              className="nav-link text-lightest-slate font-mono hover:text-brand transition-colors duration-300"
             >
               <span className="text-brand mr-1">0{index + 1}.</span>{link.name}
             </a>
           ))}
-          <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="font-mono text-brand border border-brand rounded px-4 py-2 hover:bg-brand/10 transition-colors duration-300" style={{ animation: `fadeInUp 0.5s ease-out ${NAV_LINKS.length * 0.1 + 0.5}s forwards`, opacity: 0 }}>
+          <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="nav-link font-mono text-brand border border-brand rounded px-4 py-2 hover:bg-brand/10 transition-colors duration-300">
             Resume
           </a>
         </div>

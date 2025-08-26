@@ -1,26 +1,63 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { PROJECTS_DATA } from '../../../constants';
 import SectionTitle from './SectionTitle';
 import { FolderIcon, GithubIcon, ExternalLinkIcon } from './icons/UtilityIcons';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const Projects: React.FC = () => {
-  const [isMounted, setIsMounted] = useState(false);
+  const sectionRef = useRef(null);
 
   useEffect(() => {
-    const timeout = setTimeout(() => setIsMounted(true), 200);
-    return () => clearTimeout(timeout);
+    const el = sectionRef.current;
+    const title = el.querySelector('.section-title');
+    const projectCards = el.querySelectorAll('.project-card');
+
+    const tl = gsap.timeline({
+        scrollTrigger: {
+            trigger: el,
+            start: 'top 70%',
+            toggleActions: 'play none none none'
+        }
+    });
+
+    tl.from(title, {
+      opacity: 0,
+      y: -50,
+      duration: 1,
+      ease: 'power3.out'
+    }).from(projectCards, {
+        autoAlpha: 0,
+        y: 20,
+        stagger: 0.2,
+        duration: 0.8,
+        ease: 'power3.out'
+    }, "-=0.5");
+
+    projectCards.forEach(card => {
+        card.addEventListener('mouseenter', () => {
+            gsap.to(card, { y: -10, duration: 0.3, ease: 'power2.out' });
+        });
+        card.addEventListener('mouseleave', () => {
+            gsap.to(card, { y: 0, duration: 0.3, ease: 'power2.out' });
+        });
+    });
+
   }, []);
 
   return (
-    <section id="projects" className="py-24">
-      <SectionTitle number="3" title="Things I've Built" />
+    <section id="projects" ref={sectionRef} className="py-24">
+      <div className="section-title">
+        <SectionTitle number="3" title="Things I've Built" />
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {PROJECTS_DATA.map((project, index) => (
-          <div 
-            key={project.title} 
-            className={`bg-light-navy p-7 rounded-lg shadow-md flex flex-col justify-between hover:-translate-y-2 transition-transform duration-300 ${isMounted ? 'fade-in-up' : 'opacity-0'}`}
-            style={{ animationDelay: `${index * 0.15}s` }}
+          <div
+            key={project.title}
+            className="project-card bg-light-navy p-7 rounded-lg shadow-md flex flex-col justify-between transition-transform duration-300 invisible"
           >
             <div>
               <div className="flex justify-between items-center mb-6">

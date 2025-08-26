@@ -1,18 +1,48 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import SectionTitle from './SectionTitle';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const About: React.FC = () => {
-  const [isMounted, setIsMounted] = useState(false);
+  const sectionRef = useRef(null);
 
   useEffect(() => {
-    const timeout = setTimeout(() => setIsMounted(true), 200);
-    return () => clearTimeout(timeout);
+    const el = sectionRef.current;
+    const title = el.querySelector('.section-title');
+    const paragraphs = el.querySelectorAll('p');
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: el,
+        start: 'top 80%',
+        end: 'bottom 20%',
+        toggleActions: 'play none none none'
+      }
+    });
+
+    tl.from(title, {
+      opacity: 0,
+      y: -50,
+      duration: 1,
+      ease: 'power3.out'
+    }).from(paragraphs, {
+      opacity: 0,
+      y: 20,
+      stagger: 0.2,
+      duration: 0.8,
+      ease: 'power3.out'
+    }, "-=0.5");
+
   }, []);
 
   return (
-    <section id="about" className={`py-24 ${isMounted ? 'fade-in-up' : 'opacity-0'}`}>
-      <SectionTitle number="1" title="About Me" />
+    <section id="about" ref={sectionRef} className="py-24">
+      <div className="section-title">
+        <SectionTitle number="1" title="About Me" />
+      </div>
       <div className="max-w-3xl space-y-4 text-slate text-lg">
         <p>
           Hello! I&apos;m Rizaldi, a proactive and disciplined 7th-semester Informatics Engineering student at Universitas Mataram (expected graduation in 2026), with practical experience as a Full-Stack Developer.
