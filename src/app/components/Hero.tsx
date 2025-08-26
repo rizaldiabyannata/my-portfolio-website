@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import ComputerCanvas from './ComputerCanvas';
+import CanvasScene from './Canvas';
 
 const Hero: React.FC = () => {
   const [isMounted, setIsMounted] = useState(false);
@@ -31,7 +31,7 @@ const Hero: React.FC = () => {
             </a>
           </div>
           <div className="w-full md:w-1/2 h-[50vh] md:h-screen">
-            <ComputerCanvas />
+            <CanvasScene />
           </div>
         </div>
       </div>
