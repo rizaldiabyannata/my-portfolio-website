@@ -67,7 +67,7 @@ const AvatarComponent = (props: JSX.IntrinsicElements['group']) => {
   ].filter(Boolean), group);
 
   useEffect(() => {
-    actions[animation]?.reset().fadeIn(0.1).play();
+    actions[animation]?.fadeIn(0.1).play();
     return () => {
       actions[animation]?.fadeOut(0.1);
     };
