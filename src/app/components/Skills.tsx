@@ -8,10 +8,11 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 
 const Skills: React.FC = () => {
-  const sectionRef = useRef(null);
+  const sectionRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     const el = sectionRef.current;
+    if (!el) return;
     const title = el.querySelector('.section-title');
     const skillCategories = el.querySelectorAll('.skill-category');
 
