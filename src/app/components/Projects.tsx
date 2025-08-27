@@ -1,14 +1,17 @@
 "use client";
 import React, { useState, useEffect, useRef } from 'react';
-import { PROJECTS_DATA } from '../../../constants';
+import { getProjectsData } from '../../../constants';
 import SectionTitle from './SectionTitle';
 import { FolderIcon, GithubIcon, ExternalLinkIcon } from './icons/UtilityIcons';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useTranslation } from 'react-i18next';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const Projects: React.FC = () => {
+  const { t, i18n } = useTranslation();
+  const projects = getProjectsData(i18n.language);
   const sectionRef = useRef<HTMLElement | null>(null);
   const [isMounted, setIsMounted] = useState(false);
 
@@ -67,10 +70,10 @@ const Projects: React.FC = () => {
   return (
     <section id="projects" ref={sectionRef} className="py-24">
       <div className="section-title">
-        <SectionTitle number="3" title="Things I've Built" />
+        <SectionTitle number="3" title={t('projects.title')} />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {PROJECTS_DATA.map((project, index) => (
+        {projects.map((project, index) => (
           <div
             key={project.title}
             className="project-card bg-light-navy p-7 rounded-lg shadow-md flex flex-col justify-between transition-transform duration-300"

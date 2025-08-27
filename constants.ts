@@ -39,23 +39,52 @@ export const SKILLS_DATA: { [key: string]: Skill[] } = {
   ]
 };
 
-export const PROJECTS_DATA: Project[] = [
-  {
-    title: 'Company Profile - CV. POLLACHEIAL NETWORK',
-    description: 'Served as the sole developer in designing, developing, and launching a complete company profile website. Built an efficient backend using Node.js & Express.js and an interactive, responsive UI with Vue.js.',
-    tags: ['Node.js', 'Express.js', 'Vue.js', 'Solo Developer'],
-    repoUrl: 'https://github.com/rizaldiabyannata',
-  },
-  {
-    title: 'Backend for Company Profile - PT. TOTAL DESAIN KONSULTAN',
-    description: 'An ongoing project to develop a robust backend system for a professional company profile website. Responsibilities include designing the database architecture and building RESTful APIs.',
-    tags: ['Node.js', 'Express.js', 'API Design', 'Database Architecture'],
-    repoUrl: 'https://github.com/rizaldiabyannata',
-  },
-  {
-    title: 'Personal Finance Mobile App Backend (Academic)',
-    description: 'Developed the complete backend API service for a mobile app that helps users track and manage personal finances. Also took on the role of Project Manager to coordinate team workflow and ensure project milestones were met.',
-    tags: ['Node.js', 'Express.js', 'API Development', 'Project Management'],
-    repoUrl: 'https://github.com/rizaldiabyannata',
-  },
-];
+const projects = {
+  en: [
+    {
+      title: 'Company Profile - CV. POLLACHEIAL NETWORK',
+      description: 'Served as the sole developer in designing, developing, and launching a complete company profile website. Built an efficient backend using Node.js & Express.js and an interactive, responsive UI with Vue.js.',
+      tags: ['Node.js', 'Express.js', 'Vue.js', 'Solo Developer'],
+      repoUrl: 'https://github.com/rizaldiabyannata',
+    },
+    {
+      title: 'Backend for Company Profile - PT. TOTAL DESAIN KONSULTAN',
+      description: 'An ongoing project to develop a robust backend system for a professional company profile website. Responsibilities include designing the database architecture and building RESTful APIs.',
+      tags: ['Node.js', 'Express.js', 'API Design', 'Database Architecture'],
+      repoUrl: 'https://github.com/rizaldiabyannata',
+    },
+    {
+      title: 'Personal Finance Mobile App Backend (Academic)',
+      description: 'Developed the complete backend API service for a mobile app that helps users track and manage personal finances. Also took on the role of Project Manager to coordinate team workflow and ensure project milestones were met.',
+      tags: ['Node.js', 'Express.js', 'API Development', 'Project Management'],
+      repoUrl: 'https://github.com/rizaldiabyannata',
+    },
+  ],
+  id: [
+    {
+      title: 'Profil Perusahaan - CV. POLLACHEIAL NETWORK',
+      description: 'Berperan sebagai pengembang tunggal dalam merancang, mengembangkan, dan meluncurkan situs web profil perusahaan yang lengkap. Membangun backend yang efisien menggunakan Node.js & Express.js dan UI yang interaktif dan responsif dengan Vue.js.',
+      tags: ['Node.js', 'Express.js', 'Vue.js', 'Solo Developer'],
+      repoUrl: 'https://github.com/rizaldiabyannata',
+    },
+    {
+      title: 'Backend untuk Profil Perusahaan - PT. TOTAL DESAIN KONSULTAN',
+      description: 'Proyek yang sedang berjalan untuk mengembangkan sistem backend yang kuat untuk situs web profil perusahaan profesional. Tanggung jawab termasuk merancang arsitektur basis data dan membangun API RESTful.',
+      tags: ['Node.js', 'Express.js', 'Desain API', 'Arsitektur Database'],
+      repoUrl: 'https://github.com/rizaldiabyannata',
+    },
+    {
+      title: 'Backend Aplikasi Seluler Keuangan Pribadi (Akademik)',
+      description: 'Mengembangkan layanan API backend lengkap untuk aplikasi seluler yang membantu pengguna melacak dan mengelola keuangan pribadi. Juga mengambil peran sebagai Manajer Proyek untuk mengoordinasikan alur kerja tim dan memastikan tonggak proyek tercapai.',
+      tags: ['Node.js', 'Express.js', 'Pengembangan API', 'Manajemen Proyek'],
+      repoUrl: 'https://github.com/rizaldiabyannata',
+    },
+  ],
+};
+
+export const getProjectsData = (lang: string): Project[] => {
+  if (lang === 'id') {
+    return projects.id;
+  }
+  return projects.en;
+};

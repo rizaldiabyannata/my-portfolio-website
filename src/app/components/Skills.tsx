@@ -4,10 +4,12 @@ import { SKILLS_DATA } from '../../../constants';
 import SectionTitle from './SectionTitle';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useTranslation } from 'react-i18next';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const Skills: React.FC = () => {
+  const { t } = useTranslation();
   const sectionRef = useRef<HTMLElement | null>(null);
   const [isMounted, setIsMounted] = useState(false);
 
@@ -81,7 +83,7 @@ const Skills: React.FC = () => {
   return (
     <section id="skills" ref={sectionRef} className="py-24">
       <div className="section-title">
-        <SectionTitle number="2" title="My Skills" />
+        <SectionTitle number="2" title={t('skills.title')} />
       </div>
       <div className="space-y-12">
         {Object.entries(SKILLS_DATA).map(([category, skills]) => (

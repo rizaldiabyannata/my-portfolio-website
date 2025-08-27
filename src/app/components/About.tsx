@@ -3,10 +3,12 @@ import React, { useState, useEffect, useRef } from 'react';
 import SectionTitle from './SectionTitle';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useTranslation } from 'react-i18next';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const About: React.FC = () => {
+  const { t } = useTranslation();
   const sectionRef = useRef<HTMLElement>(null);
   const [isMounted, setIsMounted] = useState(false);
 
@@ -57,17 +59,17 @@ const About: React.FC = () => {
   return (
     <section id="about" ref={sectionRef} className="py-24">
       <div className="section-title">
-        <SectionTitle number="1" title="About Me" />
+        <SectionTitle number="1" title={t('about.title')} />
       </div>
       <div className="max-w-3xl space-y-4 text-slate text-lg">
         <p>
-          Hello! I&apos;m Rizaldi, a proactive and disciplined 7th-semester Informatics Engineering student at Universitas Mataram (expected graduation in 2026), with practical experience as a Full-Stack Developer.
+          {t('about.p1')}
         </p>
         <p>
-          I am skilled in building robust backend systems using Node.js (with Express.js and Bun.js) and developing dynamic frontend interfaces with technologies like Vue.js, React.js, and Next.js. My expertise also includes Docker, RESTful API integration, and database management with MySQL and MongoDB.
+          {t('about.p2')}
         </p>
         <p>
-          As a quick learner, I am enthusiastic about applying my skills to build high-performance professional websites. I am ready to contribute effectively and bring technical value to a collaborative team environment.
+          {t('about.p3')}
         </p>
       </div>
     </section>

@@ -1,0 +1,36 @@
+{
+  "nav": {
+    "about": "Tentang",
+    "skills": "Keahlian",
+    "projects": "Proyek",
+    "contact": "Kontak",
+    "resume": "Resume"
+  },
+  "hero": {
+    "greeting": "Hai, nama saya",
+    "name": "Rizaldi Abyannata.",
+    "subtitle": "Saya membangun backend yang kuat & frontend yang dinamis.",
+    "description": "Seorang mahasiswa Teknik Informatika semester 7 yang proaktif dengan pengalaman praktis sebagai Full-Stack Developer. Saya berspesialisasi dalam membangun sistem backend yang kuat dengan Node.js dan mewujudkan ide-ide di web.",
+    "button": "Hubungi Saya"
+  },
+  "about": {
+    "title": "Tentang Saya",
+    "p1": "Halo! Saya Rizaldi, seorang Pengembang Full-Stack yang bersemangat dengan fokus kuat pada teknologi backend. Perjalanan saya ke dunia pemrograman dimulai di tahun pertama kuliah, di mana saya menemukan kecintaan untuk membangun sesuatu yang hidup di internet. Sejak saat itu, saya telah mengasah keterampilan saya di Node.js, Express.js, dan kerangka kerja frontend modern seperti React dan Vue.",
+    "p2": "Tujuan saya adalah membangun aplikasi web yang efisien, dapat diskalakan, dan dapat dipelihara. Saya menikmati tantangan memecahkan masalah yang kompleks dan saya selalu bersemangat untuk mempelajari teknologi dan praktik terbaik baru.",
+    "p3": "Ketika saya tidak sedang membuat kode, Anda dapat menemukan saya menjelajahi proyek sumber terbuka baru, atau berkontribusi pada komunitas pengembang."
+  },
+  "skills": {
+    "title": "Keahlian Saya"
+  },
+  "projects": {
+    "title": "Proyek Saya"
+  },
+  "contact": {
+    "title": "Hubungi Saya",
+    "p1": "Saat ini saya sedang mencari peluang baru, kotak masuk saya selalu terbuka. Apakah Anda punya pertanyaan atau hanya ingin menyapa, saya akan berusaha sebaik mungkin untuk membalas Anda!",
+    "button": "Katakan Halo"
+  },
+  "footer": {
+    "text": "Didesain & Dibuat oleh Rizaldi Abyannata"
+  }
+}

@@ -2,8 +2,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import CanvasScene from './Canvas';
 import { gsap } from 'gsap';
+import { useTranslation } from 'react-i18next';
 
 const Hero: React.FC = () => {
+    const { t } = useTranslation();
     const heroRef = useRef(null);
     const [isMounted, setIsMounted] = useState(false);
 
@@ -39,11 +41,11 @@ const Hero: React.FC = () => {
       <div className="container mx-auto px-6 md:px-12 lg:px-24 w-full">
         <div className="flex flex-col md:flex-row items-center justify-center w-full">
           <div className="w-full mt-40 md:w-1/2">
-            <h1 className="hero-title text-brand font-mono text-lg mb-4">Hi, my name is</h1>
-            <h2 className="hero-name text-4xl sm:text-6xl md:text-7xl font-bold text-lightest-slate mb-2">Rizaldi Abyannata.</h2>
-            <h3 className="hero-subtitle text-4xl sm:text-5xl md:text-6xl font-bold text-light-slate mb-6">I build robust backends & dynamic frontends.</h3>
+            <h1 className="hero-title text-brand font-mono text-lg mb-4">{t('hero.greeting')}</h1>
+            <h2 className="hero-name text-4xl sm:text-6xl md:text-7xl font-bold text-lightest-slate mb-2">{t('hero.name')}</h2>
+            <h3 className="hero-subtitle text-4xl sm:text-5xl md:text-6xl font-bold text-light-slate mb-6">{t('hero.subtitle')}</h3>
             <p className="hero-description max-w-xl text-lg text-light-slate mb-8">
-              A proactive 7th-semester Informatics Engineering student with practical experience as a Full-Stack Developer. I specialize in building robust backend systems with Node.js and bringing ideas to life on the web.
+              {t('hero.description')}
             </p>
             <a href="#contact"
                onClick={(e) => {
@@ -54,7 +56,7 @@ const Hero: React.FC = () => {
                  }
                }}
                className="hero-button inline-block font-mono text-brand border border-brand rounded px-8 py-4 text-lg hover:bg-brand/10 transition-all duration-300">
-              Get In Touch
+              {t('hero.button')}
             </a>
           </div>
           <div className="w-full md:w-1/2 h-[50vh] md:h-[80vh] flex items-center justify-center">

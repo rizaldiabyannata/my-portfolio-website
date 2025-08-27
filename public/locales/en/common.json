@@ -1,0 +1,36 @@
+{
+  "nav": {
+    "about": "About",
+    "skills": "Skills",
+    "projects": "Projects",
+    "contact": "Contact",
+    "resume": "Resume"
+  },
+  "hero": {
+    "greeting": "Hi, my name is",
+    "name": "Rizaldi Abyannata.",
+    "subtitle": "I build robust backends & dynamic frontends.",
+    "description": "A proactive 7th-semester Informatics Engineering student with practical experience as a Full-Stack Developer. I specialize in building robust backend systems with Node.js and bringing ideas to life on the web.",
+    "button": "Get In Touch"
+  },
+  "about": {
+    "title": "About Me",
+    "p1": "Hello! I'm Rizaldi, a passionate Full-Stack Developer with a strong focus on backend technologies. My journey into programming began in my first year of college, where I discovered a love for building things that live on the internet. Since then, I've been honing my skills in Node.js, Express.js, and modern frontend frameworks like React and Vue.",
+    "p2": "My goal is to build efficient, scalable, and maintainable web applications. I enjoy the challenge of solving complex problems and I'm always eager to learn new technologies and best practices.",
+    "p3": "When I'm not coding, you can find me exploring new open-source projects, or contributing to the developer community."
+  },
+  "skills": {
+    "title": "My Skills"
+  },
+  "projects": {
+    "title": "My Projects"
+  },
+  "contact": {
+    "title": "Get In Touch",
+    "p1": "I'm currently looking for new opportunities, my inbox is always open. Whether you have a question or just want to say hi, I'll try my best to get back to you!",
+    "button": "Say Hello"
+  },
+  "footer": {
+    "text": "Designed & Built by Rizaldi Abyannata"
+  }
+}

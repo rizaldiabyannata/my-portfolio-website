@@ -2,8 +2,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { NAV_LINKS } from '../../../constants';
 import { gsap } from 'gsap';
+import { ThemeSwitcher } from './ThemeSwitcher';
+import { useTranslation } from 'react-i18next';
 
 const Header: React.FC = () => {
+  const { t } = useTranslation();
   const [scrolled, setScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const headerRef = useRef(null);
@@ -80,12 +83,13 @@ const Header: React.FC = () => {
               onClick={(e) => handleLinkClick(e, link.href)}
               className="nav-link text-lightest-slate font-mono hover:text-brand transition-colors duration-300"
             >
-              <span className="text-brand mr-1">0{index + 1}.</span>{link.name}
+              <span className="text-brand mr-1">0{index + 1}.</span>{t(`nav.${link.name.toLowerCase()}`)}
             </a>
           ))}
           <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="nav-link font-mono text-brand border border-brand rounded px-4 py-2 hover:bg-brand/10 transition-colors duration-300">
-            Resume
+            {t('nav.resume')}
           </a>
+          <ThemeSwitcher />
         </div>
 
         {/* Mobile Menu Button */}
@@ -108,11 +112,11 @@ const Header: React.FC = () => {
               onClick={(e) => handleLinkClick(e, link.href)}
               className="text-lightest-slate font-mono text-lg hover:text-brand transition-colors duration-300"
             >
-              <span className="text-brand block text-center mb-1">0{index + 1}.</span>{link.name}
+              <span className="text-brand block text-center mb-1">0{index + 1}.</span>{t(`nav.${link.name.toLowerCase()}`)}
             </a>
           ))}
           <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="font-mono text-lg text-brand border border-brand rounded px-6 py-3 hover:bg-brand/10 transition-colors duration-300 mt-4">
-            Resume
+            {t('nav.resume')}
           </a>
         </div>
       </div>
