@@ -41,3 +41,51 @@
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+/* Custom Cursor Styles */
+body {
+  cursor: none;
+}
+
+.custom-cursor {
+  position: fixed;
+  width: 32px;
+  height: 32px;
+  background-image: url('https://katana.network/assets/images/cursor-sword-small.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-10%, -10%);
+  transition: transform 0.1s ease-out;
+}
+
+.custom-cursor.hover {
+  transform: translate(-10%, -10%) scale(1.2);
+}
+
+/* Hide custom cursor on mobile */
+@media (max-width: 768px) {
+  body {
+    cursor: auto;
+  }
+  .custom-cursor {
+    display: none;
+  }
+}
+
+/* Button Glow Effect */
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 3px #64ffda;
+  }
+  50% {
+    box-shadow: 0 0 10px #64ffda, 0 0 15px #64ffda;
+  }
+}
+
+.btn-glow {
+  animation: glow 3s ease-in-out infinite;
+  --tw-shadow-color: #64ffda;
+  --tw-shadow: 0 0 0.5rem var(--tw-shadow-color);
+}

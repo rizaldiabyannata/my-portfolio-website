@@ -53,7 +53,7 @@ const Hero: React.FC = () => {
                     contactEl.scrollIntoView({ behavior: 'smooth' });
                  }
                }}
-               className="hero-button inline-block font-mono text-brand border border-brand rounded px-8 py-4 text-lg hover:bg-brand/10 transition-all duration-300">
+               className="hero-button btn-glow inline-block font-mono text-brand border border-brand rounded px-8 py-4 text-lg hover:bg-brand/10 transition-all duration-300">
               Get In Touch
             </a>
           </div>

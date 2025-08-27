@@ -1,61 +1,13 @@
 "use client";
-import React, { useState, useEffect, useRef } from 'react';
+import React from 'react';
 import SectionTitle from './SectionTitle';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
+import { useScrollFadeIn } from '../hooks/useScrollFadeIn';
 
 const About: React.FC = () => {
-  const sectionRef = useRef<HTMLElement>(null);
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    const timeout = setTimeout(() => setIsMounted(true), 200);
-    return () => clearTimeout(timeout);
-  }, []);
-
-  useEffect(() => {
-    if (!isMounted) return;
-
-    const el = sectionRef.current;
-    if (!el) return;
-
-    const title = el.querySelector('.section-title');
-    const paragraphs = gsap.utils.toArray<HTMLElement>(el.querySelectorAll('p'));
-
-    gsap.set([title, ...paragraphs], { autoAlpha: 0 });
-
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: el,
-        start: 'top 80%',
-        end: 'bottom 20%',
-        toggleActions: 'play none none none'
-      }
-    });
-
-    if (title) {
-        tl.to(title, {
-            autoAlpha: 1,
-            y: 0,
-            duration: 1,
-            ease: 'power3.out'
-        });
-    }
-
-    tl.to(paragraphs, {
-      autoAlpha: 1,
-      y: 0,
-      stagger: 0.2,
-      duration: 0.8,
-      ease: 'power3.out'
-    }, "-=0.5");
-
-  }, [isMounted]);
+  const sectionRef = useScrollFadeIn<HTMLElement>();
 
   return (
-    <section id="about" ref={sectionRef} className="py-24">
+    <section id="about" ref={sectionRef} className="py-24 opacity-0">
       <div className="section-title">
         <SectionTitle number="1" title="About Me" />
       </div>

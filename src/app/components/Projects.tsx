@@ -1,58 +1,16 @@
 "use client";
-import React, { useState, useEffect, useRef } from 'react';
+import React from 'react';
 import { PROJECTS_DATA } from '../../../constants';
 import SectionTitle from './SectionTitle';
 import { FolderIcon, GithubIcon, ExternalLinkIcon } from './icons/UtilityIcons';
+import { useScrollFadeIn } from '../hooks/useScrollFadeIn';
 import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
 
 const Projects: React.FC = () => {
-  const sectionRef = useRef<HTMLElement | null>(null);
-  const [isMounted, setIsMounted] = useState(false);
+  const sectionRef = useScrollFadeIn<HTMLElement>();
 
-  useEffect(() => {
-    const timeout = setTimeout(() => setIsMounted(true), 200);
-    return () => clearTimeout(timeout);
-  }, []);
-
-  useEffect(() => {
-    if (!isMounted) return;
-
-    const el = sectionRef.current;
-    if (!el) return;
-
-    const title = el.querySelector('.section-title');
+  React.useEffect(() => {
     const projectCards = gsap.utils.toArray<HTMLElement>(".project-card");
-
-    gsap.set(projectCards, { autoAlpha: 0, y: 20 });
-
-    const tl = gsap.timeline({
-        scrollTrigger: {
-            trigger: el,
-            start: 'top 70%',
-            toggleActions: 'play none none none'
-        }
-    });
-
-    if (title) {
-      tl.from(title, {
-        opacity: 0,
-        y: -50,
-        duration: 1,
-        ease: 'power3.out'
-      });
-    }
-
-    tl.to(projectCards, {
-        autoAlpha: 1,
-        y: 0,
-        stagger: 0.2,
-        duration: 0.8,
-        ease: 'power3.out'
-    }, "-=0.5");
-
     projectCards.forEach(card => {
         card.addEventListener('mouseenter', () => {
             gsap.to(card, { y: -10, duration: 0.3, ease: 'power2.out' });
@@ -61,16 +19,15 @@ const Projects: React.FC = () => {
             gsap.to(card, { y: 0, duration: 0.3, ease: 'power2.out' });
         });
     });
-
-  }, [isMounted]);
+  }, []);
 
   return (
-    <section id="projects" ref={sectionRef} className="py-24">
+    <section id="projects" ref={sectionRef} className="py-24 opacity-0">
       <div className="section-title">
         <SectionTitle number="3" title="Things I've Built" />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {PROJECTS_DATA.map((project, index) => (
+        {PROJECTS_DATA.map((project) => (
           <div
             key={project.title}
             className="project-card bg-light-navy p-7 rounded-lg shadow-md flex flex-col justify-between transition-transform duration-300"

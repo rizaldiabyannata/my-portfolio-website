@@ -1,85 +1,14 @@
 "use client";
-import React, { useState, useEffect, useRef } from 'react';
+import React from 'react';
 import { SKILLS_DATA } from '../../../constants';
 import SectionTitle from './SectionTitle';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
+import { useScrollFadeIn } from '../hooks/useScrollFadeIn';
 
 const Skills: React.FC = () => {
-  const sectionRef = useRef<HTMLElement | null>(null);
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    const timeout = setTimeout(() => setIsMounted(true), 200);
-    return () => clearTimeout(timeout);
-  }, []);
-
-  useEffect(() => {
-    if (!isMounted) return;
-
-    const el = sectionRef.current;
-    if (!el) return;
-
-    const title = (el as HTMLElement).querySelector('.section-title');
-    gsap.set(title, { autoAlpha: 0, y: -50 });
-
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: el,
-        start: 'top 80%',
-        toggleActions: 'play none none none'
-      }
-    });
-
-    if (title) {
-        tl.to(title, {
-            autoAlpha: 1,
-            y: 0,
-            duration: 1,
-            ease: 'power3.out'
-        });
-    }
-
-    const skillCategories = gsap.utils.toArray<HTMLElement>('.skill-category');
-    skillCategories.forEach(category => {
-      const categoryTitle = category.querySelector('h3');
-      const skills = gsap.utils.toArray<HTMLElement>(category.querySelectorAll('.skill-item'));
-
-      gsap.set([categoryTitle, ...skills], { autoAlpha: 0 });
-
-      const categoryTl = gsap.timeline({
-        scrollTrigger: {
-          trigger: category,
-          start: 'top 85%',
-          toggleActions: 'play none none none'
-        }
-      });
-
-      if(categoryTitle) {
-          categoryTl.to(categoryTitle, {
-            autoAlpha: 1,
-            y: 0,
-            duration: 0.8,
-            ease: 'power3.out'
-          });
-      }
-
-      categoryTl.to(skills, {
-        autoAlpha: 1,
-        y: 0,
-        scale: 1,
-        stagger: 0.1,
-        duration: 0.5,
-        ease: 'power3.out'
-      }, "-=0.5");
-    });
-
-  }, [isMounted]);
+  const sectionRef = useScrollFadeIn<HTMLElement>();
 
   return (
-    <section id="skills" ref={sectionRef} className="py-24">
+    <section id="skills" ref={sectionRef} className="py-24 opacity-0">
       <div className="section-title">
         <SectionTitle number="2" title="My Skills" />
       </div>
