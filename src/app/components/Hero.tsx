@@ -10,6 +10,7 @@ const Hero: React.FC = () => {
     const heroRef = useRef(null);
     const canvasContainerRef = useRef(null);
     const [isMounted, setIsMounted] = useState(false);
+    const [animationName, setAnimationName] = useState('Breathing Idle');
 
     useEffect(() => {
         const timeout = setTimeout(() => setIsMounted(true), 200);
@@ -37,17 +38,31 @@ const Hero: React.FC = () => {
           .to(".hero-description", { opacity: 1, y: 0, duration: 0.8 }, "-=0.6")
           .to(".hero-button", { opacity: 1, y: 0, duration: 0.8 }, "-=0.6");
 
-        if (canvasContainerRef.current) {
+        if (canvasContainerRef.current && heroRef.current) {
             gsap.to(canvasContainerRef.current, {
                 y: '80vh',
                 scrollTrigger: {
                     trigger: heroRef.current,
                     start: 'top top',
                     end: 'bottom top',
-                    scrub: true,
+                    scrub: 1,
                     pin: canvasContainerRef.current,
                 }
             });
+
+            ScrollTrigger.create({
+                trigger: heroRef.current,
+                start: 'top top',
+                end: 'bottom top',
+                onEnter: () => setAnimationName('Falling Idle'),
+                onLeaveBack: () => setAnimationName('Breathing Idle'),
+                onLeave: () => setAnimationName('Falling To Landing'),
+                onEnterBack: () => setAnimationName('Falling Idle'),
+            });
+        }
+
+        return () => {
+            ScrollTrigger.getAll().forEach(trigger => trigger.kill());
         }
     }, [isMounted]);
 
@@ -75,7 +90,7 @@ const Hero: React.FC = () => {
             </a>
           </div>
           <div ref={canvasContainerRef} className="w-full md:w-1/2 h-[50vh] md:h-[80vh] flex items-center justify-center">
-            <CanvasScene />
+            <CanvasScene animationName={animationName} />
           </div>
         </div>
       </div>

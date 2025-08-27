@@ -34,7 +34,11 @@ const CanvasLoader = () => {
   );
 };
 
-const CanvasScene = () => {
+interface CanvasSceneProps {
+  animationName: string;
+}
+
+const CanvasScene: React.FC<CanvasSceneProps> = ({ animationName }) => {
   return (
     <Canvas
       frameloop="always"
@@ -70,6 +74,7 @@ const CanvasScene = () => {
         </mesh>
 
         <Avatar
+          animationName={animationName}
           position={[0, -3.7, 0]}
           scale={3.2}
           rotation={[0, Math.PI / 2.2, 0]}

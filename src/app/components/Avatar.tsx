@@ -10,32 +10,12 @@ import { useAnimations, useFBX, useGLTF } from '@react-three/drei'
 import { GLTF, SkeletonUtils } from 'three-stdlib'
 import { gsap } from 'gsap'
 
-type GLTFResult = GLTF & {
-  nodes: {
-    Wolf3D_Hair: THREE.SkinnedMesh
-    Wolf3D_Outfit_Top: THREE.SkinnedMesh
-    Wolf3D_Outfit_Bottom: THREE.SkinnedMesh
-    Wolf3D_Outfit_Footwear: THREE.SkinnedMesh
-    Wolf3D_Body: THREE.SkinnedMesh
-    EyeLeft: THREE.SkinnedMesh
-    EyeRight: THREE.SkinnedMesh
-    Wolf3D_Head: THREE.SkinnedMesh
-    Wolf3D_Teeth: THREE.SkinnedMesh
-    Hips: THREE.Bone
-  }
-  materials: {
-    Wolf3D_Hair: THREE.MeshStandardMaterial
-    Wolf3D_Outfit_Top: THREE.MeshStandardMaterial
-    Wolf3D_Outfit_Bottom: THREE.MeshStandardMaterial
-    Wolf3D_Outfit_Footwear: THREE.MeshStandardMaterial
-    Wolf3D_Body: THREE.MeshStandardMaterial
-    Wolf3D_Eye: THREE.MeshStandardMaterial
-    Wolf3D_Skin: THREE.MeshStandardMaterial
-    Wolf3D_Teeth: THREE.MeshStandardMaterial
-  }
+interface AvatarComponentProps extends JSX.IntrinsicElements['group'] {
+  animationName: string;
 }
 
-const AvatarComponent = (props: JSX.IntrinsicElements['group']) => {
+const AvatarComponent = (props: AvatarComponentProps) => {
+  const { animationName } = props;
   const { scene } = useGLTF('/model/Avatar.glb')
   const {animations: saluteAnimation} = useFBX("/animations/Salute.fbx")
   const {animations: dancingAnimation} = useFBX("/animations/Silly Dancing.fbx")
@@ -50,12 +30,6 @@ const AvatarComponent = (props: JSX.IntrinsicElements['group']) => {
   if (sadAnimation[0]) sadAnimation[0].name = "Sad Idle"
   if (fallingAnimation[0]) fallingAnimation[0].name = "Falling Idle"
   if (landingAnimation[0]) landingAnimation[0].name = "Falling To Landing"
-
-  const animationsList = [
-    saluteAnimation[0]?.name,
-    dancingAnimation[0]?.name,
-    sadAnimation[0]?.name
-  ].filter(Boolean) as string[];
 
   const group = useRef<THREE.Group>(null);
   const { actions } = useAnimations(
@@ -101,87 +75,47 @@ const AvatarComponent = (props: JSX.IntrinsicElements['group']) => {
       delay: 1,
     });
 
-    if (!actions || Object.keys(actions).length === 0) return;
-
     actions['Breathing Idle']?.play();
+  }, [isMounted, actions]);
 
-    let timeout: NodeJS.Timeout;
-
-    const switchAnimation = () => {
-      const oldAnimationName = currentAnimation.current;
-      const newAnimationName =
-        oldAnimationName === 'Breathing Idle'
-          ? animationsList[Math.floor(Math.random() * animationsList.length)]
-          : 'Breathing Idle';
-
-      const oldAction = actions[oldAnimationName];
-      const newAction = actions[newAnimationName];
-
-      if (oldAction && newAction) {
-        newAction.reset().play();
-        oldAction.crossFadeTo(newAction, 0.5, true);
-        currentAnimation.current = newAnimationName;
-      }
-
-      timeout = setTimeout(switchAnimation, 10000);
-    };
-
-    timeout = setTimeout(switchAnimation, 10000);
-
-    let hasFallen = false;
-    let landingTimeout: NodeJS.Timeout;
+  useEffect(() => {
     let idleTimeout: NodeJS.Timeout;
 
-    const handleScroll = () => {
-      const aboutSection = document.getElementById('about');
-      if (aboutSection && !hasFallen) {
-        const { top } = aboutSection.getBoundingClientRect();
-        if (top <= window.innerHeight * 0.7) {
-          hasFallen = true;
+    const newAnimationName = animationName;
+    const oldAnimationName = currentAnimation.current;
 
-          const oldAction = actions[currentAnimation.current];
-          const newAction = actions['Falling Idle'];
+    if (oldAnimationName === newAnimationName) return;
 
-          if (oldAction && newAction) {
-            newAction.reset().play();
-            oldAction.crossFadeTo(newAction, 0.5, true);
-            currentAnimation.current = 'Falling Idle';
-          }
+    const oldAction = actions[oldAnimationName];
+    const newAction = actions[newAnimationName];
 
-          landingTimeout = setTimeout(() => {
-            const oldAction = actions['Falling Idle'];
-            const newAction = actions['Falling To Landing'];
-            if (oldAction && newAction) {
-              newAction.reset().play().setLoop(THREE.LoopOnce, 1);
-              newAction.clampWhenFinished = true;
-              oldAction.crossFadeTo(newAction, 0.5, true);
-              currentAnimation.current = 'Falling To Landing';
-
-              idleTimeout = setTimeout(() => {
-                const landingAction = actions['Falling To Landing'];
-                const idleAction = actions['Breathing Idle'];
-                if (landingAction && idleAction) {
-                  idleAction.reset().play();
-                  landingAction.crossFadeTo(idleAction, 0.5, true);
-                  currentAnimation.current = 'Breathing Idle';
-                }
-              }, 2000); // Adjust this timeout based on the length of the landing animation
-            }
-          }, 1000); // Delay to sync with canvas movement
-        }
+    if (oldAction && newAction) {
+      newAction.reset();
+      if (newAnimationName === 'Falling To Landing') {
+        newAction.setLoop(THREE.LoopOnce, 1);
+        newAction.clampWhenFinished = true;
       }
-    };
+      newAction.play();
+      oldAction.crossFadeTo(newAction, 0.5, true);
+      currentAnimation.current = newAnimationName;
+    }
 
-    window.addEventListener('scroll', handleScroll);
+    if (newAnimationName === 'Falling To Landing') {
+      idleTimeout = setTimeout(() => {
+        const landingAction = actions['Falling To Landing'];
+        const idleAction = actions['Breathing Idle'];
+        if (landingAction && idleAction) {
+          idleAction.reset().play();
+          landingAction.crossFadeTo(idleAction, 0.5, true);
+          currentAnimation.current = 'Breathing Idle';
+        }
+      }, 2000); // Duration of landing animation
+    }
 
     return () => {
-      clearTimeout(timeout);
-      clearTimeout(landingTimeout);
       clearTimeout(idleTimeout);
-      window.removeEventListener('scroll', handleScroll);
-      Object.values(actions).forEach((action) => action?.fadeOut(0.5));
-    };
-  }, [isMounted, actions, animationsList]);
+    }
+  }, [animationName, actions]);
 
   const clone = React.useMemo(() => SkeletonUtils.clone(scene), [scene])
   const { nodes, materials } = useGraph(clone as THREE.Object3D) as unknown as GLTFResult
