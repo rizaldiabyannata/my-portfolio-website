@@ -47,7 +47,7 @@ const Contact: React.FC = () => {
       </p>
       <a
         href="mailto:mail@rizaldiabyannata.dev"
-        className="inline-block font-mono text-brand border border-brand rounded px-8 py-4 text-lg hover:bg-brand/10 transition-all duration-300"
+        className="inline-block btn-glow font-mono text-brand border border-brand rounded px-8 py-4 text-lg hover:bg-brand/10 transition-all duration-300"
       >
         Say Hello
       </a>

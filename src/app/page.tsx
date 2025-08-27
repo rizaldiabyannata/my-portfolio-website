@@ -7,11 +7,6 @@ import Skills from "./components/Skills";
 import Projects from "./components/Projects";
 import Hero from "./components/Hero";
 import Contact from "./components/Contact";
-import ParallaxSection from './components/ParallaxSection';
-
-const parallaxImg1 = "https://images.unsplash.com/photo-1597733336794-12d05021d510?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8YWJzdHJhY3QlMjB0ZWNoJTIwYmFja2dyb3VuZHxlbnwwfHwwfHx8MA%3D%3D";
-const parallaxImg2 = "https://images.unsplash.com/photo-1579548122080-c35fd6820ecb?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YWJzdHJhY3QlMjB0ZWNoJTIwYmFja2dyb3VuZHxlbnwwfHwwfHx8MA%3D%3D";
-
 
 export default function Home() {
   const [isMounted, setIsMounted] = useState(false);
@@ -41,14 +36,12 @@ export default function Home() {
             <About />
         </div>
 
-        <ParallaxSection imageUrl={parallaxImg1} />
 
         <div className="container mx-auto px-6 md:px-12 lg:px-24">
             <Skills />
             <Projects />
         </div>
 
-        <ParallaxSection imageUrl={parallaxImg2} />
 
         <div className="container mx-auto px-6 md:px-12 lg:px-24">
             <Contact />

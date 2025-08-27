@@ -51,7 +51,7 @@ body {
   position: fixed;
   width: 32px;
   height: 32px;
-  background-image: url('https://katana.network/assets/images/cursor-sword-small.png');
+  background-image: url('/cursor.png');
   background-size: contain;
   background-repeat: no-repeat;
   pointer-events: none;
@@ -88,4 +88,16 @@ body {
   animation: glow 3s ease-in-out infinite;
   --tw-shadow-color: #64ffda;
   --tw-shadow: 0 0 0.5rem var(--tw-shadow-color);
+}
+
+/* Hilangkan cursor default pada elemen interaktif */
+a, button, [role="button"] {
+  cursor: none !important;
+}
+
+.custom-cursor {
+  position: fixed;
+  z-index: 9999;
+  pointer-events: none;
+  /* Tambahkan style lain sesuai kebutuhan */
 }

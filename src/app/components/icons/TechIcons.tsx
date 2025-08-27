@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   SiNodedotjs,
+  SiExpress,
   SiDocker,
   SiReact,
   SiMongodb,
@@ -24,6 +25,7 @@ const iconProps = {
 // Setiap komponen sekarang merender ikon dari pustaka react-icons
 // dengan properti yang sama untuk konsistensi.
 export const NodejsIcon: React.FC = () => <SiNodedotjs {...iconProps} />;
+export const ExpressIcon: React.FC = () => <SiExpress {...iconProps} />;
 export const DockerIcon: React.FC = () => <SiDocker {...iconProps} />;
 export const ReactIcon: React.FC = () => <SiReact {...iconProps} />;
 export const MongoIcon: React.FC = () => <SiMongodb {...iconProps} />;
@@ -41,6 +43,7 @@ export const GitIcon: React.FC = () => <SiGit {...iconProps} />;
 // Ekspor default tetap sama agar kompatibel dengan sisa kode Anda.
 const icons = {
   NodejsIcon,
+  ExpressIcon,
   DockerIcon,
   ReactIcon,
   MongoIcon,

@@ -3,7 +3,8 @@ import type { Project, Skill } from './types';
 import { 
   NodejsIcon, DockerIcon, ReactIcon, MongoIcon, VuejsIcon, NextjsIcon, 
   NuxtjsIcon, TailwindIcon, JavaScriptIcon, HtmlIcon, CssIcon, BunIcon, 
-  MysqlIcon, GitIcon 
+  MysqlIcon, GitIcon, 
+  ExpressIcon
 } from './src/app/components/icons/TechIcons';
 
 export const NAV_LINKS = [
@@ -16,7 +17,7 @@ export const NAV_LINKS = [
 export const SKILLS_DATA: { [key: string]: Skill[] } = {
   'Backend': [
     { name: 'Node.js', icon: React.createElement(NodejsIcon) },
-    { name: 'Express.js', icon: React.createElement(NodejsIcon) },
+    { name: 'Express.js', icon: React.createElement(ExpressIcon) },
     { name: 'Bun.js', icon: React.createElement(BunIcon) },
   ],
   'Frontend': [
