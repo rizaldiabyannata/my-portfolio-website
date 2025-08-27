@@ -2,9 +2,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import CanvasScene from './Canvas';
 import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const Hero: React.FC = () => {
     const heroRef = useRef(null);
+    const canvasContainerRef = useRef(null);
     const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {
@@ -32,6 +36,19 @@ const Hero: React.FC = () => {
           .to(".hero-subtitle", { opacity: 1, y: 0, duration: 0.8 }, "-=0.6")
           .to(".hero-description", { opacity: 1, y: 0, duration: 0.8 }, "-=0.6")
           .to(".hero-button", { opacity: 1, y: 0, duration: 0.8 }, "-=0.6");
+
+        if (canvasContainerRef.current) {
+            gsap.to(canvasContainerRef.current, {
+                y: '80vh',
+                scrollTrigger: {
+                    trigger: heroRef.current,
+                    start: 'top top',
+                    end: 'bottom top',
+                    scrub: true,
+                    pin: canvasContainerRef.current,
+                }
+            });
+        }
     }, [isMounted]);
 
   return (
@@ -57,7 +74,7 @@ const Hero: React.FC = () => {
               Get In Touch
             </a>
           </div>
-          <div className="w-full md:w-1/2 h-[50vh] md:h-[80vh] flex items-center justify-center">
+          <div ref={canvasContainerRef} className="w-full md:w-1/2 h-[50vh] md:h-[80vh] flex items-center justify-center">
             <CanvasScene />
           </div>
         </div>

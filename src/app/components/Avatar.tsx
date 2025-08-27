@@ -41,11 +41,15 @@ const AvatarComponent = (props: JSX.IntrinsicElements['group']) => {
   const {animations: dancingAnimation} = useFBX("/animations/Silly Dancing.fbx")
   const {animations: breathingAnimation} = useFBX("/animations/Breathing Idle.fbx")
   const {animations: sadAnimation} = useFBX("/animations/Sad Idle.fbx")
+  const {animations: fallingAnimation} = useFBX("/animations/Falling Idle.fbx")
+  const {animations: landingAnimation} = useFBX("/animations/Falling To Landing.fbx")
 
   if (saluteAnimation[0]) saluteAnimation[0].name = "Salute"
   if (dancingAnimation[0]) dancingAnimation[0].name = "Silly Dancing"
   if (breathingAnimation[0]) breathingAnimation[0].name = "Breathing Idle"
   if (sadAnimation[0]) sadAnimation[0].name = "Sad Idle"
+  if (fallingAnimation[0]) fallingAnimation[0].name = "Falling Idle"
+  if (landingAnimation[0]) landingAnimation[0].name = "Falling To Landing"
 
   const animationsList = [
     saluteAnimation[0]?.name,
@@ -60,6 +64,8 @@ const AvatarComponent = (props: JSX.IntrinsicElements['group']) => {
       dancingAnimation[0],
       breathingAnimation[0],
       sadAnimation[0],
+      fallingAnimation[0],
+      landingAnimation[0],
     ].filter(Boolean),
     group
   );
@@ -122,8 +128,57 @@ const AvatarComponent = (props: JSX.IntrinsicElements['group']) => {
 
     timeout = setTimeout(switchAnimation, 10000);
 
+    let hasFallen = false;
+    let landingTimeout: NodeJS.Timeout;
+    let idleTimeout: NodeJS.Timeout;
+
+    const handleScroll = () => {
+      const aboutSection = document.getElementById('about');
+      if (aboutSection && !hasFallen) {
+        const { top } = aboutSection.getBoundingClientRect();
+        if (top <= window.innerHeight * 0.7) {
+          hasFallen = true;
+
+          const oldAction = actions[currentAnimation.current];
+          const newAction = actions['Falling Idle'];
+
+          if (oldAction && newAction) {
+            newAction.reset().play();
+            oldAction.crossFadeTo(newAction, 0.5, true);
+            currentAnimation.current = 'Falling Idle';
+          }
+
+          landingTimeout = setTimeout(() => {
+            const oldAction = actions['Falling Idle'];
+            const newAction = actions['Falling To Landing'];
+            if (oldAction && newAction) {
+              newAction.reset().play().setLoop(THREE.LoopOnce, 1);
+              newAction.clampWhenFinished = true;
+              oldAction.crossFadeTo(newAction, 0.5, true);
+              currentAnimation.current = 'Falling To Landing';
+
+              idleTimeout = setTimeout(() => {
+                const landingAction = actions['Falling To Landing'];
+                const idleAction = actions['Breathing Idle'];
+                if (landingAction && idleAction) {
+                  idleAction.reset().play();
+                  landingAction.crossFadeTo(idleAction, 0.5, true);
+                  currentAnimation.current = 'Breathing Idle';
+                }
+              }, 2000); // Adjust this timeout based on the length of the landing animation
+            }
+          }, 1000); // Delay to sync with canvas movement
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
     return () => {
       clearTimeout(timeout);
+      clearTimeout(landingTimeout);
+      clearTimeout(idleTimeout);
+      window.removeEventListener('scroll', handleScroll);
       Object.values(actions).forEach((action) => action?.fadeOut(0.5));
     };
   }, [isMounted, actions, animationsList]);
