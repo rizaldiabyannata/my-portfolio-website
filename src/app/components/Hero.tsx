@@ -43,7 +43,7 @@ const Hero: React.FC = () => {
             <h2 className="hero-name text-4xl sm:text-6xl md:text-7xl font-bold text-lightest-slate mb-2">Rizaldi Abyannata.</h2>
             <h3 className="hero-subtitle text-4xl sm:text-5xl md:text-6xl font-bold text-light-slate mb-6">I build robust backends & dynamic frontends.</h3>
             <p className="hero-description max-w-xl text-lg text-light-slate mb-8">
-              A proactive 7th-semester Informatics Engineering student with practical experience as a Full-Stack Developer. I specialize in building robust backend systems with Node.js and bringing ideas to life on the web.
+              A proactive Senior Informatics Engineering student with practical experience as a Full-Stack Developer. I specialize in building robust backend systems with Node.js and bringing ideas to life on the web.
             </p>
             <a href="#contact"
                onClick={(e) => {
