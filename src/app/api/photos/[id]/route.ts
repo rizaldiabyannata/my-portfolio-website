@@ -30,10 +30,14 @@ export async function DELETE(
     try {
         const filePath = path.join(process.cwd(), 'public', photo.imageUrl);
         await fs.unlink(filePath);
-    } catch (fileError: any) {
+    } catch (fileError) {
         // Log the error, but don't block the response.
         // The DB record is the source of truth, so if the file is already gone, it's okay.
-        console.warn(`Could not delete file for photo ${id}: ${fileError.message}`);
+        if (fileError instanceof Error) {
+            console.warn(`Could not delete file for photo ${params.id}: ${fileError.message}`);
+        } else {
+            console.warn(`Could not delete file for photo ${params.id}: An unknown error occurred`);
+        }
     }
 
     return new NextResponse(null, { status: 204 }); // No Content

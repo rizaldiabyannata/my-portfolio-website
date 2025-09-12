@@ -30,8 +30,12 @@ const LoginPage = () => {
       const { token } = await res.json();
       localStorage.setItem('authToken', token);
       router.push('/admin/dashboard');
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('An unknown error occurred');
+      }
     }
   };
 

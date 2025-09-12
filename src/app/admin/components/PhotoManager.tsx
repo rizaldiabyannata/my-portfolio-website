@@ -18,8 +18,12 @@ const PhotoManager = () => {
       if (!res.ok) throw new Error('Failed to fetch photos');
       const data: Photo[] = await res.json();
       setPhotos(data);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('An unknown error occurred');
+      }
     } finally {
       setIsLoading(false);
     }
@@ -63,8 +67,12 @@ const PhotoManager = () => {
       if(fileInput) fileInput.value = '';
 
       fetchPhotos(); // Refresh list
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('An unknown error occurred');
+      }
     }
   };
 
@@ -77,8 +85,12 @@ const PhotoManager = () => {
               throw new Error(err?.message || 'Failed to delete photo');
           }
           fetchPhotos(); // Refresh list
-      } catch (err: any) {
-          setError(err.message);
+      } catch (err) {
+        if (err instanceof Error) {
+            setError(err.message);
+        } else {
+            setError('An unknown error occurred');
+        }
       }
   };
 

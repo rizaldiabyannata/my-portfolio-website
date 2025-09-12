@@ -27,8 +27,12 @@ const ProjectManager = () => {
       if (!res.ok) throw new Error('Failed to fetch projects');
       const data: Project[] = await res.json();
       setProjects(data);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('An unknown error occurred');
+      }
     } finally {
       setIsLoading(false);
     }
@@ -60,8 +64,12 @@ const ProjectManager = () => {
       }
       resetForm();
       fetchProjects(); // Refresh list
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('An unknown error occurred');
+      }
     }
   };
 
@@ -84,8 +92,12 @@ const ProjectManager = () => {
           const res = await fetch(`/api/projects/${id}`, { method: 'DELETE' });
           if (!res.ok) throw new Error('Failed to delete project');
           fetchProjects(); // Refresh list
-      } catch (err: any) {
-          setError(err.message);
+      } catch (err) {
+        if (err instanceof Error) {
+            setError(err.message);
+        } else {
+            setError('An unknown error occurred');
+        }
       }
   };
 
