@@ -44,7 +44,7 @@ const CanvasScene = () => {
       gl={{ preserveDrawingBuffer: true, powerPreference: "high-performance" }}
       className="w-full h-full"
     >
-      <Suspense fallback={<Html center>Loading...</Html>}>
+      <Suspense fallback={<CanvasLoader />}>
         <hemisphereLight intensity={1.5} groundColor="#222" />
         <ambientLight intensity={0.5} />
         <directionalLight

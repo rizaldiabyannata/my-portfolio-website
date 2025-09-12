@@ -18,8 +18,12 @@ const SkillManager = () => {
       if (!res.ok) throw new Error('Failed to fetch skills');
       const data: Skill[] = await res.json();
       setSkills(data);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('An unknown error occurred');
+      }
     } finally {
       setIsLoading(false);
     }
@@ -51,8 +55,12 @@ const SkillManager = () => {
       }
       resetForm();
       fetchSkills();
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('An unknown error occurred');
+      }
     }
   };
 
@@ -72,8 +80,12 @@ const SkillManager = () => {
           const res = await fetch(`/api/skills/${id}`, { method: 'DELETE' });
           if (!res.ok) throw new Error('Failed to delete skill');
           fetchSkills();
-      } catch (err: any) {
-          setError(err.message);
+      } catch (err) {
+        if (err instanceof Error) {
+            setError(err.message);
+        } else {
+            setError('An unknown error occurred');
+        }
       }
   };
 

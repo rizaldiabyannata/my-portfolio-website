@@ -9,7 +9,7 @@ const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const headerRef = useRef(null);
   const [isMounted, setIsMounted] = useState(false);
-  const pathname = typeof window !== 'undefined' ? window.location.pathname : '';
+  const pathname = usePathname();
 
   useEffect(() => {
     const timeout = setTimeout(() => setIsMounted(true), 200);

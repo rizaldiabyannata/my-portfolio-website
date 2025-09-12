@@ -1,41 +1,6 @@
 "use client";
 
-import React, { Suspense } from "react";
-import {
-  useGLTF,
-  Html,
-  useProgress,
-} from "@react-three/drei";
-import { Avatar } from "./Avatar";
-
-// Komponen loader yang sudah diperbaiki
-const CanvasLoader = () => {
-  const { progress } = useProgress();
-  return (
-    <Html
-      as="div"
-      center
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        flexDirection: "column",
-      }}
-    >
-      <span className="canvas-loader"></span>
-      <p
-        style={{
-          fontSize: 14,
-          color: "#F1F1F1",
-          fontWeight: 800,
-          marginTop: 40,
-        }}
-      >
-        {progress.toFixed(2)}%
-      </p>
-    </Html>
-  );
-};
+import { useGLTF } from "@react-three/drei";
 
 // Komponen model 3D komputer (tidak ada perubahan)
 const Computer = () => {
