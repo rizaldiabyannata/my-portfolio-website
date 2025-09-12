@@ -2,12 +2,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { NAV_LINKS } from '../../../constants';
 import { gsap } from 'gsap';
+import { usePathname } from 'next/navigation';
 
 const Header: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const headerRef = useRef(null);
   const [isMounted, setIsMounted] = useState(false);
+  const pathname = typeof window !== 'undefined' ? window.location.pathname : '';
 
   useEffect(() => {
     const timeout = setTimeout(() => setIsMounted(true), 200);
@@ -58,10 +60,33 @@ const Header: React.FC = () => {
   
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
-    const target = document.querySelector(href);
-    if (target) {
-        target.scrollIntoView({ behavior: 'smooth' });
+    
+    // Extract the path and hash from href
+    const url = new URL(href);
+    const path = url.pathname;
+    const hash = url.hash;
+
+    // Jika kita berada di halaman yang berbeda dan mencoba mengakses section
+    if (pathname !== '/' && hash) {
+      // Redirect ke home page dengan hash
+      window.location.href = `/${hash}`;
+      return;
     }
+
+    // Jika di homepage dan mengklik section
+    if (pathname === '/' && hash) {
+      const target = document.querySelector(hash);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth' });
+      }
+      return;
+    }
+
+    // Untuk navigasi ke halaman lain (seperti /gallery)
+    if (path !== pathname) {
+      window.location.href = href;
+    }
+    
     setIsMenuOpen(false);
   };
 

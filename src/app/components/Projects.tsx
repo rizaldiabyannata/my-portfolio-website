@@ -14,6 +14,7 @@ interface ProjectsProps {
 
 const Projects: React.FC<ProjectsProps> = ({ projects }) => {
   const sectionRef = useRef<HTMLElement | null>(null);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
 
@@ -59,6 +60,7 @@ const Projects: React.FC<ProjectsProps> = ({ projects }) => {
         });
     });
 
+    setIsMounted(true);
   }, [isMounted]);
 
   return (

@@ -6,8 +6,8 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "postgresql"
+  url      = env("DB_URL")
 }
 
 model User {
@@ -25,9 +25,11 @@ model Project {
   imageUrl    String?
   repoUrl     String?
   liveUrl     String?
-  tags        String   // Storing tags as a comma-separated string
+  tags        String // Storing tags as a comma-separated string
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  @@unique([title])
 }
 
 model Skill {
@@ -37,6 +39,8 @@ model Skill {
   icon      String? // Storing the name of the icon component
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@unique([name, category], name: "name_category")
 }
 
 model Photo {

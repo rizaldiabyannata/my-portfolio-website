@@ -14,6 +14,7 @@ interface SkillsProps {
 
 const Skills: React.FC<SkillsProps> = ({ skills }) => {
   const sectionRef = useRef<HTMLElement | null>(null);
+  const [isMounted, setIsMounted] = useState(false);
 
   // Group skills by category
   const groupedSkills = skills.reduce((acc, skill) => {
@@ -84,6 +85,7 @@ const Skills: React.FC<SkillsProps> = ({ skills }) => {
       }, "-=0.5");
     });
 
+    setIsMounted(true);
   }, [isMounted]);
 
   return (
