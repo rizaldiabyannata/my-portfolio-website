@@ -1,5 +1,3 @@
-"use client"
-import React, { useState, useEffect } from 'react';
 import Header from './components/Header';
 import SocialLinks from "./components/SocialLinks";
 import About from "./components/About";
@@ -7,22 +5,32 @@ import Skills from "./components/Skills";
 import Projects from "./components/Projects";
 import Hero from "./components/Hero";
 import Contact from "./components/Contact";
+import type { Project, Skill } from '@prisma/client';
 
-export default function Home() {
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    const timeout = setTimeout(() => setIsMounted(true), 100);
-    return () => clearTimeout(timeout);
-  }, []);
-
-  if (!isMounted) {
-    return (
-      <div className="bg-navy w-screen h-screen flex items-center justify-center">
-        <div className="loader"></div>
-      </div>
-    );
+// This is a server component, so we can fetch data directly
+async function getProjects(): Promise<Project[]> {
+  // The fetch URL must be absolute on the server
+  const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/projects`, { cache: 'no-store' });
+  if (!res.ok) {
+    console.error("Failed to fetch projects");
+    return [];
   }
+  return res.json();
+}
+
+async function getSkills(): Promise<Skill[]> {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/skills`, { cache: 'no-store' });
+  if (!res.ok) {
+    console.error("Failed to fetch skills");
+    return [];
+  }
+  return res.json();
+}
+
+
+export default async function Home() {
+  const projects = await getProjects();
+  const skills = await getSkills();
 
   return (
     <div className="bg-navy text-slate font-sans leading-relaxed antialiased">
@@ -36,12 +44,10 @@ export default function Home() {
             <About />
         </div>
 
-
         <div className="container mx-auto px-6 md:px-12 lg:px-24">
-            <Skills />
-            <Projects />
+            <Skills skills={skills} />
+            <Projects projects={projects} />
         </div>
-
 
         <div className="container mx-auto px-6 md:px-12 lg:px-24">
             <Contact />

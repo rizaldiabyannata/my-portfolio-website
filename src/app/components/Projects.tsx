@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef } from 'react';
-import { PROJECTS_DATA } from '../../../constants';
+import type { Project } from '@prisma/client';
 import SectionTitle from './SectionTitle';
 import { FolderIcon, GithubIcon, ExternalLinkIcon } from './icons/UtilityIcons';
 import { gsap } from 'gsap';
@@ -8,17 +8,14 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const Projects: React.FC = () => {
+interface ProjectsProps {
+  projects: Project[];
+}
+
+const Projects: React.FC<ProjectsProps> = ({ projects }) => {
   const sectionRef = useRef<HTMLElement | null>(null);
-  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    const timeout = setTimeout(() => setIsMounted(true), 200);
-    return () => clearTimeout(timeout);
-  }, []);
-
-  useEffect(() => {
-    if (!isMounted) return;
 
     const el = sectionRef.current;
     if (!el) return;
@@ -70,9 +67,9 @@ const Projects: React.FC = () => {
         <SectionTitle number="3" title="Things I've Built" />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {PROJECTS_DATA.map((project, index) => (
+        {projects.map((project) => (
           <div
-            key={project.title}
+            key={project.id}
             className="project-card bg-light-navy p-7 rounded-lg shadow-md flex flex-col justify-between transition-transform duration-300"
           >
             <div>
@@ -81,9 +78,11 @@ const Projects: React.FC = () => {
                   <FolderIcon />
                 </div>
                 <div className="flex items-center space-x-4">
-                  <a href={project.repoUrl} target="_blank" rel="noopener noreferrer" className="text-light-slate hover:text-brand transition-colors duration-300 w-6 h-6">
-                    <GithubIcon />
-                  </a>
+                  {project.repoUrl && (
+                    <a href={project.repoUrl} target="_blank" rel="noopener noreferrer" className="text-light-slate hover:text-brand transition-colors duration-300 w-6 h-6">
+                      <GithubIcon />
+                    </a>
+                  )}
                   {project.liveUrl && (
                     <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="text-light-slate hover:text-brand transition-colors duration-300 w-6 h-6">
                       <ExternalLinkIcon />
@@ -95,8 +94,8 @@ const Projects: React.FC = () => {
               <p className="text-slate text-base mb-6">{project.description}</p>
             </div>
             <ul className="flex flex-wrap font-mono text-sm text-slate">
-              {project.tags.map(tag => (
-                <li key={tag} className="mr-4 mb-2">{tag}</li>
+              {(project.tags || '').split(',').map(tag => (
+                <li key={tag} className="mr-4 mb-2">{tag.trim()}</li>
               ))}
             </ul>
           </div>

@@ -1,0 +1,53 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  username  String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  imageUrl    String?
+  repoUrl     String?
+  liveUrl     String?
+  tags        String   // Storing tags as a comma-separated string
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Skill {
+  id        String   @id @default(cuid())
+  name      String
+  category  String
+  icon      String? // Storing the name of the icon component
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Photo {
+  id           String   @id @default(cuid())
+  title        String
+  description  String?
+  imageUrl     String
+  iso          String?
+  shutterSpeed String?
+  aperture     String?
+  focalLength  String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
