@@ -3,18 +3,18 @@ import { prisma } from '@/lib/prisma';
 import fs from 'fs/promises';
 import path from 'path';
 
-interface Params {
-  params: {
-    id: string;
-  };
-}
-
 // DELETE a photo by ID
-export async function DELETE(req: NextRequest, { params }: Params) {
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  const { id } = params;
+  
   try {
+    
     // First, find the photo to get the file path
     const photo = await prisma.photo.findUnique({
-      where: { id: params.id },
+      where: { id },
     });
 
     if (!photo) {
@@ -23,7 +23,7 @@ export async function DELETE(req: NextRequest, { params }: Params) {
 
     // Delete the record from the database
     await prisma.photo.delete({
-      where: { id: params.id },
+      where: { id },
     });
 
     // Then, delete the file from the filesystem
@@ -33,12 +33,12 @@ export async function DELETE(req: NextRequest, { params }: Params) {
     } catch (fileError: any) {
         // Log the error, but don't block the response.
         // The DB record is the source of truth, so if the file is already gone, it's okay.
-        console.warn(`Could not delete file for photo ${params.id}: ${fileError.message}`);
+        console.warn(`Could not delete file for photo ${id}: ${fileError.message}`);
     }
 
     return new NextResponse(null, { status: 204 }); // No Content
   } catch (error) {
-    console.error(`Failed to delete photo ${params.id}:`, error);
+    console.error(`Failed to delete photo ${id}:`, error);
     return NextResponse.json({ message: 'Failed to delete photo' }, { status: 500 });
   }
 }
