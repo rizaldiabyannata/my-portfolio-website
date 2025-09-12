@@ -7,9 +7,9 @@ export async function DELETE(
   req: NextRequest,
   context: { params: Promise<{ id: string }> }
 ) {
-  const { id } = await context.params;
   try {
-    
+    const { id } = await context.params;
+
     // First, find the photo to get the file path
     const photo = await prisma.photo.findUnique({
       where: { id },
@@ -43,7 +43,12 @@ export async function DELETE(
 
     return new NextResponse(null, { status: 204 }); // No Content
   } catch (error) {
-    console.error(`Failed to delete photo ${id}:`, error);
+    if (error instanceof Error) {
+      console.error('Delete photo error:', error.message);
+      if ((error as any).cause?.code === 'UNABLE_TO_VERIFY_LEAF_SIGNATURE') {
+        console.error('SSL Certificate verification failed');
+      }
+    }
     return NextResponse.json(
       { message: 'Failed to delete photo' },
       { status: 500 }
