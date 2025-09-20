@@ -4,7 +4,7 @@ import {
   NodejsIcon, DockerIcon, ReactIcon, MongoIcon, VuejsIcon, NextjsIcon, 
   NuxtjsIcon, TailwindIcon, JavaScriptIcon, HtmlIcon, CssIcon, BunIcon, 
   MysqlIcon, GitIcon, 
-  ExpressIcon
+  ExpressIcon, GinIcon, PostgresqlIcon, RedisIcon
 } from './src/app/components/icons/TechIcons';
 
 export const NAV_LINKS = [
@@ -19,6 +19,7 @@ export const SKILLS_DATA: { [key: string]: Skill[] } = {
     { name: 'Node.js', icon: React.createElement(NodejsIcon) },
     { name: 'Express.js', icon: React.createElement(ExpressIcon) },
     { name: 'Bun.js', icon: React.createElement(BunIcon) },
+    { name: 'Gin', icon: React.createElement(GinIcon) }
   ],
   'Frontend': [
     { name: 'JavaScript', icon: React.createElement(JavaScriptIcon) },
@@ -33,6 +34,8 @@ export const SKILLS_DATA: { [key: string]: Skill[] } = {
   'Database': [
       { name: 'MySQL', icon: React.createElement(MysqlIcon) },
       { name: 'MongoDB', icon: React.createElement(MongoIcon) },
+      { name: 'PostgreSQL', icon: React.createElement(PostgresqlIcon) },
+      { name: 'Redis', icon: React.createElement(RedisIcon) },
   ],
   'Others': [
     { name: 'Docker', icon: React.createElement(DockerIcon) },
@@ -51,12 +54,12 @@ export const PROJECTS_DATA: Project[] = [
     title: 'Backend for Company Profile - PT. TOTAL DESAIN KONSULTAN',
     description: 'An ongoing project to develop a robust backend system for a professional company profile website. Responsibilities include designing the database architecture and building RESTful APIs.',
     tags: ['Node.js', 'Express.js', 'API Design', 'Database Architecture'],
-    repoUrl: 'https://github.com/rizaldiabyannata',
+    repoUrl: 'https://github.com/rizaldiabyannata/TDK-be',
   },
   {
     title: 'Personal Finance Mobile App Backend (Academic)',
     description: 'Developed the complete backend API service for a mobile app that helps users track and manage personal finances. Also took on the role of Project Manager to coordinate team workflow and ensure project milestones were met.',
     tags: ['Node.js', 'Express.js', 'API Development', 'Project Management'],
-    repoUrl: 'https://github.com/rizaldiabyannata',
+    repoUrl: 'https://github.com/rizaldiabyannata/fintrack-be',
   },
 ];

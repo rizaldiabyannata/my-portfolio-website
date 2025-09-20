@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   SiNodedotjs,
   SiExpress,
@@ -15,7 +15,10 @@ import {
   SiBun,
   SiMysql,
   SiGit,
-} from 'react-icons/si';
+  SiGin,
+  SiPostgresql,
+  SiRedis,
+} from "react-icons/si";
 
 // Properti umum untuk semua ikon, terutama untuk styling ukuran.
 const iconProps = {
@@ -39,6 +42,9 @@ export const CssIcon: React.FC = () => <SiCss3 {...iconProps} />;
 export const BunIcon: React.FC = () => <SiBun {...iconProps} />;
 export const MysqlIcon: React.FC = () => <SiMysql {...iconProps} />;
 export const GitIcon: React.FC = () => <SiGit {...iconProps} />;
+export const GinIcon: React.FC = () => <SiGin {...iconProps} />;
+export const PostgresqlIcon: React.FC = () => <SiPostgresql {...iconProps} />;
+export const RedisIcon: React.FC = () => <SiRedis {...iconProps} />;
 
 // Ekspor default tetap sama agar kompatibel dengan sisa kode Anda.
 const icons = {
@@ -57,6 +63,9 @@ const icons = {
   BunIcon,
   MysqlIcon,
   GitIcon,
+  GinIcon,
+  PostgresqlIcon,
+  RedisIcon,
 };
 
 export default icons;
