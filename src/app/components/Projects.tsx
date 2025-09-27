@@ -1,10 +1,21 @@
 "use client";
-import React, { useState, useEffect, useRef } from 'react';
-import { PROJECTS_DATA } from '../../../constants';
-import SectionTitle from './SectionTitle';
-import { FolderIcon, GithubIcon, ExternalLinkIcon } from './icons/UtilityIcons';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import React, { useState, useEffect, useRef } from "react";
+import { PROJECTS_DATA } from "../../../constants";
+import SectionTitle from "./SectionTitle";
+import {
+  FolderIcon,
+  GithubIcon,
+  ExternalLinkIcon,
+} from "../../components/icons/UtilityIcons";
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  CardFooter,
+  CardTitle,
+} from "@/components/ui/card";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -23,17 +34,17 @@ const Projects: React.FC = () => {
     const el = sectionRef.current;
     if (!el) return;
 
-    const title = el.querySelector('.section-title');
+    const title = el.querySelector(".section-title");
     const projectCards = gsap.utils.toArray<HTMLElement>(".project-card");
 
     gsap.set(projectCards, { autoAlpha: 0, y: 20 });
 
     const tl = gsap.timeline({
-        scrollTrigger: {
-            trigger: el,
-            start: 'top 70%',
-            toggleActions: 'play none none none'
-        }
+      scrollTrigger: {
+        trigger: el,
+        start: "top 70%",
+        toggleActions: "play none none none",
+      },
     });
 
     if (title) {
@@ -41,27 +52,30 @@ const Projects: React.FC = () => {
         opacity: 0,
         y: -50,
         duration: 1,
-        ease: 'power3.out'
+        ease: "power3.out",
       });
     }
 
-    tl.to(projectCards, {
+    tl.to(
+      projectCards,
+      {
         autoAlpha: 1,
         y: 0,
         stagger: 0.2,
         duration: 0.8,
-        ease: 'power3.out'
-    }, "-=0.5");
+        ease: "power3.out",
+      },
+      "-=0.5"
+    );
 
-    projectCards.forEach(card => {
-        card.addEventListener('mouseenter', () => {
-            gsap.to(card, { y: -10, duration: 0.3, ease: 'power2.out' });
-        });
-        card.addEventListener('mouseleave', () => {
-            gsap.to(card, { y: 0, duration: 0.3, ease: 'power2.out' });
-        });
+    projectCards.forEach((card) => {
+      card.addEventListener("mouseenter", () => {
+        gsap.to(card, { y: -10, duration: 0.3, ease: "power2.out" });
+      });
+      card.addEventListener("mouseleave", () => {
+        gsap.to(card, { y: 0, duration: 0.3, ease: "power2.out" });
+      });
     });
-
   }, [isMounted]);
 
   return (
@@ -70,36 +84,56 @@ const Projects: React.FC = () => {
         <SectionTitle number="3" title="Things I've Built" />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {PROJECTS_DATA.map((project, index) => (
-          <div
+        {PROJECTS_DATA.map((project) => (
+          <Card
             key={project.title}
-            className="project-card bg-light-navy p-7 rounded-lg shadow-md flex flex-col justify-between transition-transform duration-300"
+            className="project-card flex flex-col justify-between p-0"
           >
             <div>
-              <div className="flex justify-between items-center mb-6">
+              <CardHeader className="mb-2">
                 <div className="text-brand w-10 h-10">
                   <FolderIcon />
                 </div>
                 <div className="flex items-center space-x-4">
-                  <a href={project.repoUrl} target="_blank" rel="noopener noreferrer" className="text-light-slate hover:text-brand transition-colors duration-300 w-6 h-6">
+                  <a
+                    href={project.repoUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-muted-foreground hover:text-brand transition-colors duration-300 w-6 h-6"
+                  >
                     <GithubIcon />
                   </a>
                   {project.liveUrl && (
-                    <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="text-light-slate hover:text-brand transition-colors duration-300 w-6 h-6">
+                    <a
+                      href={project.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-muted-foreground hover:text-brand transition-colors duration-300 w-6 h-6"
+                    >
                       <ExternalLinkIcon />
                     </a>
                   )}
                 </div>
-              </div>
-              <h3 className="text-xl font-bold text-lightest-slate mb-3 group-hover:text-brand transition-colors duration-300">{project.title}</h3>
-              <p className="text-slate text-base mb-6">{project.description}</p>
+              </CardHeader>
+              <CardContent>
+                <CardTitle className="text-xl mb-3 hover:text-brand transition-colors duration-300">
+                  {project.title}
+                </CardTitle>
+                <p className="text-muted-foreground text-base mb-6">
+                  {project.description}
+                </p>
+              </CardContent>
             </div>
-            <ul className="flex flex-wrap font-mono text-sm text-slate">
-              {project.tags.map(tag => (
-                <li key={tag} className="mr-4 mb-2">{tag}</li>
-              ))}
-            </ul>
-          </div>
+            <CardFooter>
+              <ul className="flex flex-wrap font-mono text-sm text-muted-foreground">
+                {project.tags.map((tag) => (
+                  <li key={tag} className="mr-4 mb-2">
+                    {tag}
+                  </li>
+                ))}
+              </ul>
+            </CardFooter>
+          </Card>
         ))}
       </div>
     </section>

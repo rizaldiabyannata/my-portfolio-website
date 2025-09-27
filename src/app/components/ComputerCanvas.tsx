@@ -1,46 +1,11 @@
 "use client";
 
-import React, { Suspense } from "react";
-import {
-  useGLTF,
-  Html,
-  useProgress,
-} from "@react-three/drei";
-import { Avatar } from "./Avatar";
+// Slimmed down computer model component (previously had unused loader & imports)
+import React from "react";
+import { useGLTF } from "@react-three/drei";
 
-// Komponen loader yang sudah diperbaiki
-const CanvasLoader = () => {
-  const { progress } = useProgress();
-  return (
-    <Html
-      as="div"
-      center
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        flexDirection: "column",
-      }}
-    >
-      <span className="canvas-loader"></span>
-      <p
-        style={{
-          fontSize: 14,
-          color: "#F1F1F1",
-          fontWeight: 800,
-          marginTop: 40,
-        }}
-      >
-        {progress.toFixed(2)}%
-      </p>
-    </Html>
-  );
-};
-
-// Komponen model 3D komputer (tidak ada perubahan)
 const Computer = () => {
   const { scene } = useGLTF("/model/gaming_desktop_pc-transformed.glb");
-
   return (
     <primitive
       object={scene}
@@ -52,3 +17,6 @@ const Computer = () => {
 };
 
 export default Computer;
+
+// Preload model to avoid hitches when/if used later
+useGLTF.preload("/model/gaming_desktop_pc-transformed.glb");

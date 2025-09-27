@@ -2,37 +2,30 @@
 
 import React, { Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
-import { Html, Preload, useProgress } from "@react-three/drei";
+import { Html, Preload } from "@react-three/drei";
 import { Avatar } from "./Avatar";
-// import ReactMemoAvatar from "./AvatarMemo";
 
-const CanvasLoader = () => {
-  const { progress } = useProgress();
-  return (
-    <Html
-      as="div"
-      center
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        flexDirection: "column",
-      }}
-    >
-      <span className="canvas-loader"></span>
-      <p
-        style={{
-          fontSize: 14,
-          color: "#F1F1F1",
-          fontWeight: 800,
-          marginTop: 40,
-        }}
-      >
-        {progress.toFixed(2)}%
-      </p>
-    </Html>
-  );
-};
+// Static fallback loader (removed dynamic progress updates to avoid React warning about
+// setState during sibling component render in concurrent mode).
+export const CanvasLoader = () => (
+  <Html
+    as="div"
+    center
+    style={{
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      flexDirection: "column",
+      fontSize: 14,
+      color: "#F1F1F1",
+      fontWeight: 600,
+      gap: 12,
+    }}
+  >
+    <span className="canvas-loader" />
+    <p>Loading 3D…</p>
+  </Html>
+);
 
 const CanvasScene = () => {
   return (
@@ -44,7 +37,7 @@ const CanvasScene = () => {
       gl={{ preserveDrawingBuffer: true, powerPreference: "high-performance" }}
       className="w-full h-full"
     >
-      <Suspense fallback={<Html center>Loading...</Html>}>
+      <Suspense fallback={<CanvasLoader />}>
         <hemisphereLight intensity={1.5} groundColor="#222" />
         <ambientLight intensity={0.5} />
         <directionalLight
@@ -64,7 +57,11 @@ const CanvasScene = () => {
           shadow-mapSize={1024}
         />
         {/* Shadow ground plane */}
-        <mesh receiveShadow position={[0, -7.5, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <mesh
+          receiveShadow
+          position={[0, -7.5, 0]}
+          rotation={[-Math.PI / 2, 0, 0]}
+        >
           <planeGeometry args={[6, 6]} />
           <shadowMaterial transparent opacity={0.4} />
         </mesh>

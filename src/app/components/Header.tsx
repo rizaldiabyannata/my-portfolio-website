@@ -2,6 +2,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { NAV_LINKS } from "../../../constants";
 import { gsap } from "gsap";
+import ThemeToggle from "./ThemeToggle";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
 
 const Header: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -85,7 +88,7 @@ const Header: React.FC = () => {
     <header
       ref={headerRef}
       className={`fixed top-0 left-0 right-0 z-[500] transition-all duration-300 ${
-        scrolled ? "bg-light-navy/80 shadow-lg backdrop-blur-sm" : ""
+        scrolled ? "bg-background/80 shadow-lg backdrop-blur-sm" : ""
       }`}
     >
       <nav className="container mx-auto px-6 md:px-12 lg:px-24 flex items-center justify-between h-20">
@@ -99,91 +102,76 @@ const Header: React.FC = () => {
               key={link.name}
               href={link.href}
               onClick={(e) => handleLinkClick(e, link.href)}
-              className="nav-link text-lightest-slate font-mono hover:text-brand transition-colors duration-300"
+              className="nav-link text-foreground font-mono hover:text-brand transition-colors duration-300"
             >
               <span className="text-brand mr-1">0{index + 1}.</span>
               {link.name}
             </a>
           ))}
-          <a
-            href="/resume.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="nav-link font-mono text-brand border border-brand rounded px-4 py-2 hover:bg-brand/10 transition-colors duration-300"
+          <Button
+            asChild
+            variant="brand"
+            size="sm"
+            className="nav-link font-mono"
           >
-            Resume
-          </a>
+            <a href="/resume.pdf" target="_blank" rel="noopener noreferrer">
+              Resume
+            </a>
+          </Button>
+          <ThemeToggle />
         </div>
 
-        {/* Mobile Menu Button */}
-        <div className="md:hidden">
-          <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="text-brand z-[220] relative w-8 h-8 flex flex-col justify-center items-center focus:outline-none"
-            aria-label="Toggle menu"
-            aria-expanded={isMenuOpen}
-          >
-            <span
-              className={`block absolute h-0.5 w-6 bg-current transform transition-all duration-300 ease-in-out ${
-                isMenuOpen ? "rotate-45 translate-y-0" : "-translate-y-1.5"
-              }`}
-            ></span>
-            <span
-              className={`block absolute h-0.5 w-6 bg-current transform transition-all duration-300 ease-in-out ${
-                isMenuOpen ? "opacity-0" : "opacity-100"
-              }`}
-            ></span>
-            <span
-              className={`block absolute h-0.5 w-6 bg-current transform transition-all duration-300 ease-in-out ${
-                isMenuOpen ? "-rotate-45 translate-y-0" : "translate-y-1.5"
-              }`}
-            ></span>
-          </button>
+        {/* Mobile Actions (Theme toggle + Menu button) */}
+        <div className="md:hidden flex items-center gap-3">
+          <ThemeToggle />
+          <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
+            <SheetTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label="Open menu"
+                className="text-brand"
+              >
+                <span className="sr-only">Open menu</span>
+                {/* Simple hamburger icon */}
+                <span className="flex flex-col gap-1">
+                  <span className="block w-5 h-0.5 bg-current"></span>
+                  <span className="block w-5 h-0.5 bg-current"></span>
+                  <span className="block w-5 h-0.5 bg-current"></span>
+                </span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent>
+              <nav className="mt-10 flex flex-col gap-6">
+                {NAV_LINKS.map((link, index) => (
+                  <a
+                    key={link.name}
+                    href={link.href}
+                    onClick={(e) => handleLinkClick(e, link.href)}
+                    className="text-foreground font-mono text-lg hover:text-brand transition-colors duration-200"
+                  >
+                    <span className="text-brand mr-2 text-sm">
+                      0{index + 1}.
+                    </span>
+                    {link.name}
+                  </a>
+                ))}
+                <Button asChild variant="brand" className="font-mono mt-4">
+                  <a
+                    href="/resume.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Resume
+                  </a>
+                </Button>
+              </nav>
+            </SheetContent>
+          </Sheet>
         </div>
       </nav>
 
-      {/* Mobile Menu */}
-      {isMenuOpen && (
-        <div className="fixed inset-0 z-[200] md:hidden">
-          {/* Backdrop */}
-          <button
-            type="button"
-            aria-label="Close menu"
-            className="absolute inset-0 bg-[#0a192f]/80 backdrop-blur-sm"
-            onClick={() => setIsMenuOpen(false)}
-          />
-
-          {/* Menu Panel */}
-          <aside
-            className={`absolute right-0 top-0 h-full w-[85vw] max-w-sm bg-light-navy shadow-2xl ring-1 ring-white/10 transform transition-transform duration-300 ease-out ${
-              isMenuOpen ? "translate-x-0" : "translate-x-full"
-            } z-[210]`}
-            aria-label="Mobile navigation"
-          >
-            <nav className="flex flex-col h-full pt-[calc(env(safe-area-inset-top)+6rem)] pb-10 px-6 gap-6 overflow-y-auto">
-              {NAV_LINKS.map((link, index) => (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  onClick={(e) => handleLinkClick(e, link.href)}
-                  className="text-lightest-slate font-mono text-xl hover:text-brand transition-colors duration-200 text-left"
-                >
-                  <span className="text-brand mr-2 text-sm">0{index + 1}.</span>
-                  {link.name}
-                </a>
-              ))}
-              <a
-                href="/resume.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-4 inline-flex items-center justify-center font-mono text-base text-brand border border-brand rounded px-5 py-3 hover:bg-brand/10 transition-colors duration-200"
-              >
-                Resume
-              </a>
-            </nav>
-          </aside>
-        </div>
-      )}
+      {/* Mobile Menu controlled via Sheet now */}
     </header>
   );
 };

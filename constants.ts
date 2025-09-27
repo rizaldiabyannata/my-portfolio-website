@@ -5,7 +5,7 @@ import {
   NuxtjsIcon, TailwindIcon, JavaScriptIcon, HtmlIcon, CssIcon, BunIcon, 
   MysqlIcon, GitIcon, 
   ExpressIcon, GinIcon, PostgresqlIcon, RedisIcon
-} from './src/app/components/icons/TechIcons';
+} from './src/components/icons/TechIcons';
 
 export const NAV_LINKS = [
   { name: 'About', href: '#about' },

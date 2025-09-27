@@ -1,8 +1,8 @@
 "use client";
-import React, { useState, useEffect, useRef } from 'react';
-import SectionTitle from './SectionTitle';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import React, { useState, useEffect, useRef } from "react";
+import SectionTitle from "./SectionTitle";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -21,37 +21,42 @@ const About: React.FC = () => {
     const el = sectionRef.current;
     if (!el) return;
 
-    const title = el.querySelector('.section-title');
-    const paragraphs = gsap.utils.toArray<HTMLElement>(el.querySelectorAll('p'));
+    const title = el.querySelector(".section-title");
+    const paragraphs = gsap.utils.toArray<HTMLElement>(
+      el.querySelectorAll("p")
+    );
 
     gsap.set([title, ...paragraphs], { autoAlpha: 0 });
 
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: el,
-        start: 'top 80%',
-        end: 'bottom 20%',
-        toggleActions: 'play none none none'
-      }
+        start: "top 80%",
+        end: "bottom 20%",
+        toggleActions: "play none none none",
+      },
     });
 
     if (title) {
-        tl.to(title, {
-            autoAlpha: 1,
-            y: 0,
-            duration: 1,
-            ease: 'power3.out'
-        });
+      tl.to(title, {
+        autoAlpha: 1,
+        y: 0,
+        duration: 1,
+        ease: "power3.out",
+      });
     }
 
-    tl.to(paragraphs, {
-      autoAlpha: 1,
-      y: 0,
-      stagger: 0.2,
-      duration: 0.8,
-      ease: 'power3.out'
-    }, "-=0.5");
-
+    tl.to(
+      paragraphs,
+      {
+        autoAlpha: 1,
+        y: 0,
+        stagger: 0.2,
+        duration: 0.8,
+        ease: "power3.out",
+      },
+      "-=0.5"
+    );
   }, [isMounted]);
 
   return (
@@ -59,15 +64,25 @@ const About: React.FC = () => {
       <div className="section-title">
         <SectionTitle number="1" title="About Me" />
       </div>
-      <div className="max-w-3xl space-y-4 text-slate text-lg">
-        <p>
-          Hello! I&apos;m Rizaldi, a proactive and disciplined 7th-semester Informatics Engineering student at Universitas Mataram (expected graduation in 2026), with practical experience as a Full-Stack Developer.
+      <div className="max-w-3xl space-y-4 text-lg">
+        <p className="text-foreground/90">
+          Hello! I&apos;m Rizaldi, a proactive and disciplined 7th-semester
+          Informatics Engineering student at Universitas Mataram (expected
+          graduation in 2026), with practical experience as a Full-Stack
+          Developer.
         </p>
-        <p>
-          I am skilled in building robust backend systems using Node.js (with Express.js and Bun.js) and developing dynamic frontend interfaces with technologies like Vue.js, React.js, and Next.js. My expertise also includes Docker, RESTful API integration, and database management with MySQL and MongoDB.
+        <p className="text-foreground/80">
+          I am skilled in building robust backend systems using Node.js (with
+          Express.js and Bun.js) and developing dynamic frontend interfaces with
+          technologies like Vue.js, React.js, and Next.js. My expertise also
+          includes Docker, RESTful API integration, and database management with
+          MySQL and MongoDB.
         </p>
-        <p>
-          As a quick learner, I am enthusiastic about applying my skills to build high-performance professional websites. I am ready to contribute effectively and bring technical value to a collaborative team environment.
+        <p className="text-foreground/80">
+          As a quick learner, I am enthusiastic about applying my skills to
+          build high-performance professional websites. I am ready to contribute
+          effectively and bring technical value to a collaborative team
+          environment.
         </p>
       </div>
     </section>
