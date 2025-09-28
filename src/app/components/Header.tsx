@@ -4,7 +4,12 @@ import { NAV_LINKS } from "../../../constants";
 import { gsap } from "gsap";
 import ThemeToggle from "./ThemeToggle";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetTrigger,
+  SheetContent,
+  SheetTitle,
+} from "@/components/ui/sheet";
 
 const Header: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -141,7 +146,10 @@ const Header: React.FC = () => {
                 </span>
               </Button>
             </SheetTrigger>
-            <SheetContent>
+            <SheetContent aria-label="Mobile navigation menu">
+              <SheetTitle className="sr-only">
+                Mobile navigation menu
+              </SheetTitle>
               <nav className="mt-10 flex flex-col gap-6">
                 {NAV_LINKS.map((link, index) => (
                   <a
