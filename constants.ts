@@ -45,6 +45,12 @@ export const SKILLS_DATA: { [key: string]: Skill[] } = {
 
 export const PROJECTS_DATA: Project[] = [
   {
+    title: 'HepiBite - Food Delivery & Management Platform',
+    description: 'A full-stack e-commerce platform for food delivery connecting snack lovers with vendors. Features include comprehensive order management, real-time delivery tracking with WhatsApp integration, multi-variant product system, voucher discounts, admin dashboard with detailed analytics, and complete CRUD operations for products, categories, and partners.',
+    tags: ['Next.js', 'TypeScript', 'Prisma', 'PostgreSQL', 'Tailwind CSS', 'Shadcn UI'],
+    repoUrl: 'https://github.com/rizaldiabyannata/HepiBite',
+  },
+  {
     title: 'Company Profile - CV. POLLACHEIAL NETWORK',
     description: 'Served as the sole developer in designing, developing, and launching a complete company profile website. Built an efficient backend using Node.js & Express.js and an interactive, responsive UI with Vue.js.',
     tags: ['Node.js', 'Express.js', 'Vue.js', 'Solo Developer'],
