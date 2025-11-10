@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
+import Link from "next/link";
 import { PROJECTS_DATA } from "../../../constants";
 import SectionTitle from "./SectionTitle";
 import {
@@ -16,6 +17,15 @@ import {
 } from "@/components/ui/card";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+function generateSlugFromTitle(title: string): string {
+  return title
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+    .trim();
+}
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -116,12 +126,22 @@ const Projects: React.FC = () => {
                 </div>
               </CardHeader>
               <CardContent>
-                <CardTitle className="text-xl mb-3 hover:text-brand transition-colors duration-300">
-                  {project.title}
-                </CardTitle>
-                <p className="text-muted-foreground text-base mb-6">
+                <Link
+                  href={`/projects/${generateSlugFromTitle(project.title)}`}
+                >
+                  <CardTitle className="text-xl mb-3 hover:text-brand transition-colors duration-300 cursor-pointer">
+                    {project.title}
+                  </CardTitle>
+                </Link>
+                <p className="text-muted-foreground text-base mb-6 line-clamp-3">
                   {project.description}
                 </p>
+                <Link
+                  href={`/projects/${generateSlugFromTitle(project.title)}`}
+                  className="text-brand hover:text-accent text-sm font-medium transition-colors inline-flex items-center gap-1"
+                >
+                  View Details →
+                </Link>
               </CardContent>
             </div>
             <CardFooter>

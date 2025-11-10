@@ -1,0 +1,104 @@
+---
+title: "Getting Started with Next.js 15 and React 19"
+date: "2024-01-15"
+excerpt: "Explore the latest features in Next.js 15 and React 19, including the App Router, Server Components, and modern development practices."
+tags: ["Next.js", "React", "TypeScript", "Web Development"]
+author: "Your Name"
+readTime: "5 min read"
+---
+
+# Getting Started with Next.js 15 and React 19
+
+Next.js 15 brings exciting improvements to the already powerful React framework. Combined with React 19, developers have access to cutting-edge features that make building web applications more efficient and enjoyable.
+
+## Key Features of Next.js 15
+
+### 1. Enhanced App Router
+
+The App Router in Next.js 15 provides a more intuitive way to handle routing and layouts:
+
+```typescript
+// app/layout.tsx
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en">
+      <body>{children}</body>
+    </html>
+  );
+}
+```
+
+### 2. Server Components by Default
+
+React Server Components are now the default, offering:
+
+- **Better Performance**: Reduced JavaScript bundle size
+- **Improved SEO**: Server-side rendering out of the box
+- **Simplified Data Fetching**: Direct database queries in components
+
+### 3. Turbopack Integration
+
+Turbopack, the Rust-based successor to Webpack, provides:
+
+- Faster build times
+- Improved hot module replacement
+- Better development experience
+
+## React 19 Highlights
+
+### Actions and Form Handling
+
+React 19 introduces native form actions:
+
+```typescript
+async function createPost(formData: FormData) {
+  "use server";
+
+  const title = formData.get("title");
+  // Handle form submission
+}
+```
+
+### Use Hook
+
+The new `use` hook simplifies data fetching:
+
+```typescript
+import { use } from "react";
+
+function UserProfile({ userPromise }) {
+  const user = use(userPromise);
+  return <div>{user.name}</div>;
+}
+```
+
+## Best Practices
+
+1. **Leverage Server Components**: Use them for data fetching and static content
+2. **Client Components for Interactivity**: Use `"use client"` directive when needed
+3. **Optimize Images**: Always use the `next/image` component
+4. **Type Safety**: Utilize TypeScript for better development experience
+
+## Getting Started
+
+To create a new Next.js 15 project with React 19:
+
+```bash
+npx create-next-app@latest my-app
+cd my-app
+npm run dev
+```
+
+## Conclusion
+
+Next.js 15 and React 19 represent a significant leap forward in web development. By embracing these new features and following best practices, you can build faster, more maintainable applications.
+
+---
+
+**Related Topics**: App Router, Server Components, Turbopack, React 19
+
+For more information, visit the [Next.js documentation](https://nextjs.org/docs).

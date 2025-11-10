@@ -11,5 +11,6 @@ export interface Project {
   description: string;
   tags: string[];
   liveUrl?: string;
+  demoUrl?: string;
   repoUrl: string;
 }
