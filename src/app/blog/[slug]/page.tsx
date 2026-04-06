@@ -1,8 +1,11 @@
 import { getAllPosts, getPostBySlug } from "@/lib/blog";
+import { extractBlogHeadings } from "@/lib/headings";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Calendar, Clock, User } from "lucide-react";
 import "highlight.js/styles/github-dark.css";
+import BlogReaderShell from "./BlogReaderShell";
+import BlogShareButton from "./BlogShareButton";
 
 export async function generateStaticParams() {
   const posts = getAllPosts();
@@ -46,10 +49,11 @@ export default async function BlogPostPage({
   }
 
   const MDXContent = (await import(`@/../../content/blog/${slug}.mdx`)).default;
+  const headings = extractBlogHeadings(post.content);
 
   return (
     <div className="min-h-screen px-4 pb-16 pt-32 sm:px-6 lg:px-10">
-      <article className="mx-auto max-w-5xl">
+      <article className="mx-auto max-w-7xl">
         <Link
           href="/blog"
           className="mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-primary"
@@ -99,22 +103,31 @@ export default async function BlogPostPage({
             </div>
 
             {post.tags?.length ? (
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 {post.tags.map((tag: string) => (
                   <span key={tag} className="label-chip">
                     {tag}
                   </span>
                 ))}
+                <div className="ml-auto">
+                  <BlogShareButton title={post.title} />
+                </div>
               </div>
-            ) : null}
+            ) : (
+              <div className="flex justify-start">
+                <BlogShareButton title={post.title} />
+              </div>
+            )}
           </div>
         </header>
 
-        <div className="surface-panel p-6 sm:p-8 lg:p-10">
-          <div className="article-prose max-w-none">
-            <MDXContent />
+        <BlogReaderShell headings={headings}>
+          <div className="surface-panel p-6 sm:p-8 lg:p-10">
+            <div className="article-prose max-w-none">
+              <MDXContent />
+            </div>
           </div>
-        </div>
+        </BlogReaderShell>
       </article>
     </div>
   );

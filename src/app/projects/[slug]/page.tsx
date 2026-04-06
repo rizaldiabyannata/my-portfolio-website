@@ -1,4 +1,5 @@
 import { PROJECTS_DATA } from "@/../../constants";
+import type { ProjectDetailSectionId } from "@/../../types";
 import { generateSlugFromTitle } from "@/lib/slugs";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -10,6 +11,7 @@ import {
   Layers3,
   NotebookPen,
 } from "lucide-react";
+import ProjectDetailShell from "./ProjectDetailShell";
 
 export async function generateStaticParams() {
   return PROJECTS_DATA.map((project) => ({
@@ -52,6 +54,13 @@ export default async function ProjectDetailPage({
   if (!project) {
     notFound();
   }
+
+  const sections: Array<{ id: ProjectDetailSectionId; label: string }> = [
+    { id: "overview", label: "Overview" },
+    { id: "highlights", label: "Highlights" },
+    { id: "stack", label: "Tech stack" },
+    { id: "contact", label: "Contact" },
+  ];
 
   return (
     <div className="min-h-screen px-4 pb-16 pt-32 sm:px-6 lg:px-10">
@@ -143,88 +152,121 @@ export default async function ProjectDetailPage({
           </div>
         </div>
 
-        <div className="mt-6 grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
-          <div className="surface-panel p-6 sm:p-8">
-            <div className="mb-6 flex items-center gap-3">
-              <div className="flex size-11 items-center justify-center rounded-2xl border border-primary/20 bg-primary/10 text-primary">
-                <NotebookPen className="size-5" />
+        <ProjectDetailShell
+          repoUrl={project.repoUrl}
+          liveUrl={project.demoUrl || project.liveUrl}
+          sections={sections}
+        >
+          <div className="grid gap-6 xl:grid-cols-[1.05fr_0.95fr]">
+            <section
+              id="overview"
+              className="project-section surface-panel p-6 sm:p-8"
+            >
+              <div className="mb-6 flex items-center gap-3">
+                <div className="flex size-11 items-center justify-center rounded-2xl border border-primary/20 bg-primary/10 text-primary">
+                  <NotebookPen className="size-5" />
+                </div>
+                <div>
+                  <h2 className="font-heading text-2xl font-semibold text-foreground">
+                    Project overview
+                  </h2>
+                  <p className="text-sm text-muted-foreground">
+                    Context and delivery summary
+                  </p>
+                </div>
               </div>
-              <div>
-                <h2 className="font-heading text-2xl font-semibold text-foreground">
-                  Project overview
-                </h2>
-                <p className="text-sm text-muted-foreground">
-                  Context and delivery summary
-                </p>
+              <div className="article-prose">
+                <p>{project.description}</p>
               </div>
-            </div>
-            <div className="article-prose">
-              <p>{project.description}</p>
-            </div>
+            </section>
+
+            <section
+              id="highlights"
+              className="project-section surface-panel p-6 sm:p-8"
+            >
+              <div className="mb-6 flex items-center gap-3">
+                <div className="flex size-11 items-center justify-center rounded-2xl border border-primary/20 bg-primary/10 text-primary">
+                  <Layers3 className="size-5" />
+                </div>
+                <div>
+                  <h2 className="font-heading text-2xl font-semibold text-foreground">
+                    Delivery highlights
+                  </h2>
+                  <p className="text-sm text-muted-foreground">
+                    Structured points from the implementation
+                  </p>
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                {project.highlights.map((highlight, index) => (
+                  <article
+                    key={highlight}
+                    className="project-section-card rounded-[1.2rem] border border-border/70 bg-background/45 px-4 py-4"
+                  >
+                    <div className="mb-2 font-mono text-xs uppercase tracking-[0.18em] text-primary/80">
+                      0{index + 1}
+                    </div>
+                    <p className="text-sm leading-6 text-muted-foreground sm:text-base">
+                      {highlight}
+                    </p>
+                  </article>
+                ))}
+              </div>
+            </section>
           </div>
 
-          <div className="surface-panel p-6 sm:p-8">
-            <div className="mb-6 flex items-center gap-3">
-              <div className="flex size-11 items-center justify-center rounded-2xl border border-primary/20 bg-primary/10 text-primary">
-                <Layers3 className="size-5" />
-              </div>
-              <div>
-                <h2 className="font-heading text-2xl font-semibold text-foreground">
-                  Delivery highlights
-                </h2>
-                <p className="text-sm text-muted-foreground">
-                  Structured points from the implementation
-                </p>
-              </div>
-            </div>
+          <section
+            id="stack"
+            className="project-section surface-panel p-6 sm:p-8"
+          >
+            <h2 className="font-heading text-2xl font-semibold text-foreground">
+              Tech stack
+            </h2>
+            <p className="mt-2 text-sm leading-6 text-muted-foreground">
+              Primary technologies used in this project.
+            </p>
 
-            <div className="space-y-3">
-              {project.highlights.map((highlight, index) => (
+            <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+              {project.tags.map((tech) => (
                 <div
-                  key={highlight}
-                  className="rounded-[1.2rem] border border-border/70 bg-background/45 px-4 py-4"
+                  key={tech}
+                  className="project-section-card rounded-[1.2rem] border border-border/70 bg-background/45 px-4 py-4 text-sm font-medium text-foreground sm:text-base"
                 >
-                  <div className="mb-2 font-mono text-xs uppercase tracking-[0.18em] text-primary/80">
-                    0{index + 1}
-                  </div>
-                  <p className="text-sm leading-6 text-muted-foreground sm:text-base">
-                    {highlight}
-                  </p>
+                  {tech}
                 </div>
               ))}
             </div>
-          </div>
-        </div>
+          </section>
 
-        <div className="surface-panel mt-6 p-6 sm:p-8">
-          <h2 className="font-heading text-2xl font-semibold text-foreground">
-            Tech stack
-          </h2>
-          <p className="mt-2 text-sm leading-6 text-muted-foreground">
-            Primary technologies used in this project.
-          </p>
-
-          <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {project.tags.map((tech) => (
-              <div
-                key={tech}
-                className="rounded-[1.2rem] border border-border/70 bg-background/45 px-4 py-4 text-sm font-medium text-foreground sm:text-base"
-              >
-                {tech}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="mt-8 flex justify-end">
-          <Link
-            href="/#contact"
-            className="inline-flex items-center gap-2 text-sm font-medium text-primary"
+          <section
+            id="contact"
+            className="project-section surface-panel p-6 sm:p-8"
           >
-            Continue to contact
-            <ArrowUpRight className="size-4" />
-          </Link>
-        </div>
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+              <div className="max-w-2xl">
+                <p className="font-mono text-[0.68rem] uppercase tracking-[0.22em] text-primary/75">
+                  Next step
+                </p>
+                <h2 className="mt-3 font-heading text-2xl font-semibold text-foreground">
+                  Continue the conversation from this case study.
+                </h2>
+                <p className="mt-2 text-sm leading-6 text-muted-foreground sm:text-base">
+                  If this project maps to what your team needs, continue to the
+                  contact section for a direct follow-up.
+                </p>
+              </div>
+
+              <Link
+                href="/#contact"
+                className="inline-flex items-center gap-2 rounded-full border border-primary bg-primary px-5 py-3 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              >
+                Continue to contact
+                <ArrowUpRight className="size-4" />
+              </Link>
+            </div>
+          </section>
+        </ProjectDetailShell>
       </div>
     </div>
   );

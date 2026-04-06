@@ -1,4 +1,8 @@
 import type { MDXComponents } from "mdx/types";
+import CodeBlock from "@/components/mdx/CodeBlock";
+import HeadingAnchor from "@/components/mdx/HeadingAnchor";
+import { extractHeadingText, slugifyHeading } from "@/lib/headings";
+import { cn } from "@/lib/utils";
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
@@ -7,15 +11,25 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         {children}
       </h1>
     ),
-    h2: ({ children }) => (
-      <h2 className="font-heading mt-12 text-3xl font-semibold text-foreground">
+    h2: ({ children, className, id, ...props }) => (
+      <HeadingAnchor
+        as="h2"
+        id={id ?? slugifyHeading(extractHeadingText(children))}
+        className={cn("font-heading mt-12 text-3xl font-semibold text-foreground", className)}
+        {...props}
+      >
         {children}
-      </h2>
+      </HeadingAnchor>
     ),
-    h3: ({ children }) => (
-      <h3 className="font-heading mt-10 text-2xl font-semibold text-foreground">
+    h3: ({ children, className, id, ...props }) => (
+      <HeadingAnchor
+        as="h3"
+        id={id ?? slugifyHeading(extractHeadingText(children))}
+        className={cn("font-heading mt-10 text-2xl font-semibold text-foreground", className)}
+        {...props}
+      >
         {children}
-      </h3>
+      </HeadingAnchor>
     ),
     p: ({ children }) => (
       <p className="text-base leading-8 text-muted-foreground">{children}</p>
@@ -61,10 +75,10 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         <code className={`${className} font-mono text-sm`}>{children}</code>
       );
     },
-    pre: ({ children }) => (
-      <pre className="overflow-x-auto rounded-[1.4rem] border border-border/70 bg-[#0b1120] p-5 text-sm text-slate-100 shadow-xl shadow-black/20">
+    pre: ({ children, className, ...props }) => (
+      <CodeBlock className={className} {...props}>
         {children}
-      </pre>
+      </CodeBlock>
     ),
     table: ({ children }) => (
       <div className="overflow-x-auto rounded-[1.2rem] border border-border/70">

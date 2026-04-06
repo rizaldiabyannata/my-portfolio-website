@@ -37,3 +37,9 @@ export interface SocialLink {
   href: string;
   icon: ReactNode;
 }
+
+export type ProjectDetailSectionId =
+  | "overview"
+  | "highlights"
+  | "stack"
+  | "contact";
