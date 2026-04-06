@@ -3,40 +3,38 @@ import type { MDXComponents } from "mdx/types";
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
     h1: ({ children }) => (
-      <h1 className="text-4xl font-bold mb-6 mt-8 text-[var(--color-primary)]">
+      <h1 className="font-heading first:mt-0 mt-10 text-4xl font-semibold text-foreground">
         {children}
       </h1>
     ),
     h2: ({ children }) => (
-      <h2 className="text-3xl font-semibold mb-4 mt-6 text-[var(--color-text)]">
+      <h2 className="font-heading mt-12 text-3xl font-semibold text-foreground">
         {children}
       </h2>
     ),
     h3: ({ children }) => (
-      <h3 className="text-2xl font-semibold mb-3 mt-5 text-[var(--color-text)]">
+      <h3 className="font-heading mt-10 text-2xl font-semibold text-foreground">
         {children}
       </h3>
     ),
     p: ({ children }) => (
-      <p className="mb-4 leading-7 text-[var(--color-text-secondary)]">
-        {children}
-      </p>
+      <p className="text-base leading-8 text-muted-foreground">{children}</p>
     ),
     ul: ({ children }) => (
-      <ul className="list-disc list-inside mb-4 space-y-2 text-[var(--color-text-secondary)]">
+      <ul className="ml-5 list-disc space-y-3 text-base leading-8 text-muted-foreground">
         {children}
       </ul>
     ),
     ol: ({ children }) => (
-      <ol className="list-decimal list-inside mb-4 space-y-2 text-[var(--color-text-secondary)]">
+      <ol className="ml-5 list-decimal space-y-3 text-base leading-8 text-muted-foreground">
         {children}
       </ol>
     ),
-    li: ({ children }) => <li className="ml-4">{children}</li>,
+    li: ({ children }) => <li>{children}</li>,
     a: ({ children, href }) => (
       <a
         href={href}
-        className="text-[var(--color-primary)] hover:text-[var(--color-accent)] underline transition-colors"
+        className="font-medium text-primary underline decoration-primary/35 underline-offset-4 transition-colors hover:text-primary/85"
         target="_blank"
         rel="noopener noreferrer"
       >
@@ -44,44 +42,48 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       </a>
     ),
     blockquote: ({ children }) => (
-      <blockquote className="border-l-4 border-[var(--color-primary)] pl-4 italic my-4 text-[var(--color-text-secondary)]">
+      <blockquote className="rounded-r-[1.2rem] border-l-4 border-primary bg-primary/8 px-5 py-4 text-base italic leading-8 text-muted-foreground">
         {children}
       </blockquote>
     ),
     code: ({ children, className }) => {
       const isInline = !className;
+
       if (isInline) {
         return (
-          <code className="bg-[var(--color-surface)] text-[var(--color-accent)] px-1.5 py-0.5 rounded text-sm font-mono">
+          <code className="rounded-md border border-border/70 bg-background/70 px-1.5 py-0.5 font-mono text-sm text-foreground">
             {children}
           </code>
         );
       }
-      return <code className={className}>{children}</code>;
+
+      return (
+        <code className={`${className} font-mono text-sm`}>{children}</code>
+      );
     },
     pre: ({ children }) => (
-      <pre className="bg-[var(--color-surface)] p-4 rounded-lg overflow-x-auto mb-4 border border-[var(--color-border)]">
+      <pre className="overflow-x-auto rounded-[1.4rem] border border-border/70 bg-[#0b1120] p-5 text-sm text-slate-100 shadow-xl shadow-black/20">
         {children}
       </pre>
     ),
     table: ({ children }) => (
-      <div className="overflow-x-auto mb-4">
-        <table className="min-w-full border-collapse border border-[var(--color-border)]">
+      <div className="overflow-x-auto rounded-[1.2rem] border border-border/70">
+        <table className="min-w-full border-collapse bg-background/45">
           {children}
         </table>
       </div>
     ),
     th: ({ children }) => (
-      <th className="border border-[var(--color-border)] px-4 py-2 bg-[var(--color-surface)] font-semibold text-left">
+      <th className="border-b border-border/70 bg-card/80 px-4 py-3 text-left text-sm font-semibold text-foreground">
         {children}
       </th>
     ),
     td: ({ children }) => (
-      <td className="border border-[var(--color-border)] px-4 py-2">
+      <td className="border-b border-border/60 px-4 py-3 text-sm text-muted-foreground">
         {children}
       </td>
     ),
-    hr: () => <hr className="my-8 border-[var(--color-border)]" />,
+    hr: () => <hr className="my-10 border-border/70" />,
     ...components,
   };
 }

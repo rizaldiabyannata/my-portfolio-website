@@ -1,111 +1,68 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
-import { SKILLS_DATA } from "../../../constants";
+
+import { motion, useReducedMotion } from "motion/react";
+import { SKILL_GROUPS } from "../../../constants";
+import Reveal from "./Reveal";
 import SectionTitle from "./SectionTitle";
-import { HoverEffect } from "@/components/ui/card-hover-effect";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-gsap.registerPlugin(ScrollTrigger);
-
-const Skills: React.FC = () => {
-  const sectionRef = useRef<HTMLElement | null>(null);
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    const timeout = setTimeout(() => setIsMounted(true), 200);
-    return () => clearTimeout(timeout);
-  }, []);
-
-  useEffect(() => {
-    if (!isMounted) return;
-
-    const el = sectionRef.current;
-    if (!el) return;
-
-    const title = (el as HTMLElement).querySelector(".section-title");
-    gsap.set(title, { autoAlpha: 0, y: -50 });
-
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: el,
-        start: "top 80%",
-        toggleActions: "play none none none",
-      },
-    });
-
-    if (title) {
-      tl.to(title, {
-        autoAlpha: 1,
-        y: 0,
-        duration: 1,
-        ease: "power3.out",
-      });
-    }
-
-    const skillCategories = gsap.utils.toArray<HTMLElement>(".skill-category");
-    skillCategories.forEach((category) => {
-      const categoryTitle = category.querySelector("h3");
-      const skills = gsap.utils.toArray<HTMLElement>(
-        category.querySelectorAll(".skill-item")
-      );
-
-      gsap.set([categoryTitle, ...skills], { autoAlpha: 0 });
-
-      const categoryTl = gsap.timeline({
-        scrollTrigger: {
-          trigger: category,
-          start: "top 85%",
-          toggleActions: "play none none none",
-        },
-      });
-
-      if (categoryTitle) {
-        categoryTl.to(categoryTitle, {
-          autoAlpha: 1,
-          y: 0,
-          duration: 0.8,
-          ease: "power3.out",
-        });
-      }
-
-      categoryTl.to(
-        skills,
-        {
-          autoAlpha: 1,
-          y: 0,
-          scale: 1,
-          stagger: 0.1,
-          duration: 0.5,
-          ease: "power3.out",
-        },
-        "-=0.5"
-      );
-    });
-  }, [isMounted]);
+const Skills = () => {
+  const prefersReducedMotion = useReducedMotion();
 
   return (
-    <section id="skills" ref={sectionRef} className="py-24">
-      <div className="section-title">
-        <SectionTitle number="2" title="My Skills" />
-      </div>
-      <div className="space-y-12">
-        {Object.entries(SKILLS_DATA).map(([category, skills]) => (
-          <div key={category} className="skill-category">
-            <h3 className="text-xl font-bold text-foreground mb-6">
-              {category}
-            </h3>
-            <HoverEffect
-              items={skills.map((s) => ({
-                title: s.name,
-                description: undefined,
-                link: "#skills",
-                icon: s.icon,
-              }))}
-              className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5"
-              showDescription={false}
-            />
-          </div>
+    <section id="skills" className="py-24">
+      <SectionTitle
+        index="02"
+        title="Capability clusters, not a random stack list."
+        description="These are the tools I use most often when the work requires solid backend delivery, practical frontend execution, and dependable shipping habits."
+      />
+
+      <div className="grid gap-6 lg:grid-cols-2">
+        {SKILL_GROUPS.map((group, groupIndex) => (
+          <Reveal
+            key={group.title}
+            delay={groupIndex * 0.05}
+            className="surface-panel p-6 sm:p-8"
+          >
+            <div className="space-y-6">
+              <div className="space-y-3">
+                <p className="font-mono text-xs uppercase tracking-[0.24em] text-primary/75">
+                  Capability cluster
+                </p>
+                <div className="space-y-3">
+                  <h3 className="font-heading text-3xl font-semibold text-foreground">
+                    {group.title}
+                  </h3>
+                  <p className="max-w-xl text-sm leading-6 text-muted-foreground sm:text-base">
+                    {group.summary}
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid gap-3 sm:grid-cols-2">
+                {group.skills.map((skill) => (
+                  <motion.div
+                    key={skill.name}
+                    whileHover={
+                      prefersReducedMotion ? undefined : { y: -4, scale: 1.01 }
+                    }
+                    transition={{ duration: 0.2, ease: "easeOut" }}
+                    className="rounded-[1.25rem] border border-border/70 bg-background/45 p-4"
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className="flex size-11 items-center justify-center rounded-2xl border border-primary/20 bg-primary/10 text-primary">
+                        <div className="size-5">{skill.icon}</div>
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-foreground sm:text-base">
+                          {skill.name}
+                        </p>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </Reveal>
         ))}
       </div>
     </section>

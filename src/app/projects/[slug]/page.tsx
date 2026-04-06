@@ -1,8 +1,15 @@
-import { notFound } from "next/navigation";
-import Link from "next/link";
 import { PROJECTS_DATA } from "@/../../constants";
-import { generateSlugFromTitle } from "@/lib/blog";
-import { ArrowLeft, ExternalLink, Github } from "lucide-react";
+import { generateSlugFromTitle } from "@/lib/slugs";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import {
+  ArrowLeft,
+  ArrowUpRight,
+  ExternalLink,
+  Github,
+  Layers3,
+  NotebookPen,
+} from "lucide-react";
 
 export async function generateStaticParams() {
   return PROJECTS_DATA.map((project) => ({
@@ -17,7 +24,7 @@ export async function generateMetadata({
 }) {
   const { slug } = await params;
   const project = PROJECTS_DATA.find(
-    (p) => generateSlugFromTitle(p.title) === slug
+    (item) => generateSlugFromTitle(item.title) === slug
   );
 
   if (!project) {
@@ -28,7 +35,7 @@ export async function generateMetadata({
 
   return {
     title: `${project.title} | Projects`,
-    description: project.description,
+    description: project.summary,
   };
 }
 
@@ -39,7 +46,7 @@ export default async function ProjectDetailPage({
 }) {
   const { slug } = await params;
   const project = PROJECTS_DATA.find(
-    (p) => generateSlugFromTitle(p.title) === slug
+    (item) => generateSlugFromTitle(item.title) === slug
   );
 
   if (!project) {
@@ -47,113 +54,177 @@ export default async function ProjectDetailPage({
   }
 
   return (
-    <div className="min-h-screen bg-[var(--color-background)] py-20 px-4">
-      <div className="max-w-5xl mx-auto">
+    <div className="min-h-screen px-4 pb-16 pt-32 sm:px-6 lg:px-10">
+      <div className="mx-auto max-w-7xl">
         <Link
           href="/#projects"
-          className="inline-flex items-center gap-2 text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] transition-colors mb-8"
+          className="mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-primary"
         >
           <ArrowLeft size={20} />
-          <span>Back to Projects</span>
+          <span>Back to selected work</span>
         </Link>
 
-        <div className="mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold text-[var(--color-text)] mb-4">
-            {project.title}
-          </h1>
+        <div className="surface-panel overflow-hidden p-6 sm:p-8 lg:p-10">
+          <div className="grid gap-8 lg:grid-cols-[1.08fr_0.92fr]">
+            <div className="space-y-6">
+              <div className="flex flex-wrap gap-3">
+                <span className="label-chip">Project case study</span>
+                {project.status ? (
+                  <span className="rounded-full border border-primary/20 bg-primary/10 px-3 py-1.5 text-sm text-primary">
+                    {project.status}
+                  </span>
+                ) : null}
+              </div>
 
-          <div className="flex flex-wrap gap-3 mb-6">
-            {project.tags.map((tag) => (
-              <span
-                key={tag}
-                className="px-4 py-2 text-sm rounded-full bg-[var(--color-primary)]/10 text-[var(--color-primary)] border border-[var(--color-primary)]/20 font-medium"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
+              <div className="space-y-4">
+                <h1 className="font-heading text-4xl font-semibold text-foreground md:text-6xl">
+                  {project.title}
+                </h1>
+                <p className="max-w-3xl text-lg leading-8 text-muted-foreground">
+                  {project.summary}
+                </p>
+              </div>
 
-          <div className="flex flex-wrap gap-4">
-            {project.repoUrl && (
-              <a
-                href={project.repoUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] hover:border-[var(--color-primary)] text-[var(--color-text)] hover:text-[var(--color-primary)] transition-all duration-300"
-              >
-                <Github size={20} />
-                <span>View Repository</span>
-                <ExternalLink size={16} />
-              </a>
-            )}
-            {project.demoUrl && (
-              <a
-                href={project.demoUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-[var(--color-primary)] text-white hover:bg-[var(--color-primary)]/90 transition-all duration-300"
-              >
-                <span>Live Demo</span>
-                <ExternalLink size={16} />
-              </a>
-            )}
+              <div className="flex flex-wrap gap-2.5">
+                {project.tags.map((tag) => (
+                  <span key={tag} className="label-chip">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
+              <div className="rounded-[1.4rem] border border-border/70 bg-background/45 p-5">
+                <p className="font-mono text-[0.68rem] uppercase tracking-[0.22em] text-primary/75">
+                  Role
+                </p>
+                <p className="mt-3 text-base text-foreground">
+                  {project.role ?? "Contributor"}
+                </p>
+              </div>
+              <div className="rounded-[1.4rem] border border-border/70 bg-background/45 p-5">
+                <p className="font-mono text-[0.68rem] uppercase tracking-[0.22em] text-primary/75">
+                  Stack coverage
+                </p>
+                <p className="mt-3 text-base text-foreground">
+                  {project.tags.length} technologies highlighted
+                </p>
+              </div>
+              <div className="rounded-[1.4rem] border border-border/70 bg-background/45 p-5">
+                <p className="font-mono text-[0.68rem] uppercase tracking-[0.22em] text-primary/75">
+                  Case study links
+                </p>
+                <div className="mt-4 flex flex-wrap gap-3">
+                  <a
+                    href={project.repoUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-card/70 px-4 py-2 text-sm text-foreground transition-colors hover:border-primary/35 hover:text-primary"
+                  >
+                    <Github size={16} />
+                    Repository
+                    <ExternalLink size={14} />
+                  </a>
+                  {project.demoUrl || project.liveUrl ? (
+                    <a
+                      href={project.demoUrl || project.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 rounded-full border border-primary bg-primary px-4 py-2 text-sm text-primary-foreground transition-colors hover:bg-primary/90"
+                    >
+                      Live preview
+                      <ArrowUpRight size={14} />
+                    </a>
+                  ) : null}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div className="bg-[var(--color-surface)] rounded-xl border border-[var(--color-border)] p-8 mb-8">
-          <h2 className="text-2xl font-bold text-[var(--color-text)] mb-4">
-            About This Project
-          </h2>
-          <div className="prose prose-lg max-w-none">
-            <p className="text-[var(--color-text-secondary)] leading-relaxed whitespace-pre-line">
-              {project.description}
-            </p>
+        <div className="mt-6 grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
+          <div className="surface-panel p-6 sm:p-8">
+            <div className="mb-6 flex items-center gap-3">
+              <div className="flex size-11 items-center justify-center rounded-2xl border border-primary/20 bg-primary/10 text-primary">
+                <NotebookPen className="size-5" />
+              </div>
+              <div>
+                <h2 className="font-heading text-2xl font-semibold text-foreground">
+                  Project overview
+                </h2>
+                <p className="text-sm text-muted-foreground">
+                  Context and delivery summary
+                </p>
+              </div>
+            </div>
+            <div className="article-prose">
+              <p>{project.description}</p>
+            </div>
+          </div>
+
+          <div className="surface-panel p-6 sm:p-8">
+            <div className="mb-6 flex items-center gap-3">
+              <div className="flex size-11 items-center justify-center rounded-2xl border border-primary/20 bg-primary/10 text-primary">
+                <Layers3 className="size-5" />
+              </div>
+              <div>
+                <h2 className="font-heading text-2xl font-semibold text-foreground">
+                  Delivery highlights
+                </h2>
+                <p className="text-sm text-muted-foreground">
+                  Structured points from the implementation
+                </p>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              {project.highlights.map((highlight, index) => (
+                <div
+                  key={highlight}
+                  className="rounded-[1.2rem] border border-border/70 bg-background/45 px-4 py-4"
+                >
+                  <div className="mb-2 font-mono text-xs uppercase tracking-[0.18em] text-primary/80">
+                    0{index + 1}
+                  </div>
+                  <p className="text-sm leading-6 text-muted-foreground sm:text-base">
+                    {highlight}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
-        {/* Tech Stack Section */}
-        <div className="bg-[var(--color-surface)] rounded-xl border border-[var(--color-border)] p-8 mb-8">
-          <h2 className="text-2xl font-bold text-[var(--color-text)] mb-4">
-            Tech Stack
+        <div className="surface-panel mt-6 p-6 sm:p-8">
+          <h2 className="font-heading text-2xl font-semibold text-foreground">
+            Tech stack
           </h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <p className="mt-2 text-sm leading-6 text-muted-foreground">
+            Primary technologies used in this project.
+          </p>
+
+          <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {project.tags.map((tech) => (
               <div
                 key={tech}
-                className="flex items-center justify-center p-4 rounded-lg bg-[var(--color-background)] border border-[var(--color-border)] hover:border-[var(--color-primary)] transition-colors"
+                className="rounded-[1.2rem] border border-border/70 bg-background/45 px-4 py-4 text-sm font-medium text-foreground sm:text-base"
               >
-                <span className="text-[var(--color-text)] font-medium">
-                  {tech}
-                </span>
+                {tech}
               </div>
             ))}
           </div>
         </div>
 
-        {/* Key Features (parsed from description) */}
-        {project.description.includes("Features") && (
-          <div className="bg-[var(--color-surface)] rounded-xl border border-[var(--color-border)] p-8">
-            <h2 className="text-2xl font-bold text-[var(--color-text)] mb-4">
-              Key Features
-            </h2>
-            <div className="space-y-3">
-              {project.description
-                .split(".")
-                .filter((sentence) => sentence.trim().length > 0)
-                .map((feature, index) => (
-                  <div
-                    key={index}
-                    className="flex items-start gap-3 text-[var(--color-text-secondary)]"
-                  >
-                    <span className="flex-shrink-0 w-6 h-6 rounded-full bg-[var(--color-primary)]/10 text-[var(--color-primary)] flex items-center justify-center text-sm font-medium mt-0.5">
-                      {index + 1}
-                    </span>
-                    <p className="leading-relaxed">{feature.trim()}.</p>
-                  </div>
-                ))}
-            </div>
-          </div>
-        )}
+        <div className="mt-8 flex justify-end">
+          <Link
+            href="/#contact"
+            className="inline-flex items-center gap-2 text-sm font-medium text-primary"
+          >
+            Continue to contact
+            <ArrowUpRight className="size-4" />
+          </Link>
+        </div>
       </div>
     </div>
   );

@@ -4,25 +4,26 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap font-mono text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 rounded-md border border-border",
+  "inline-flex items-center justify-center whitespace-nowrap rounded-full border text-sm font-medium ring-offset-background transition-[background-color,border-color,color,transform,box-shadow] duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        default:
+          "border-primary bg-primary text-primary-foreground shadow-lg shadow-primary/20 hover:bg-primary/92",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/90",
+          "border-border/80 bg-card/80 text-foreground hover:bg-card",
         outline:
-          "bg-background text-foreground hover:bg-accent/50 border-border",
-        ghost: "hover:bg-accent/50 text-foreground",
+          "border-border/80 bg-background/40 text-foreground hover:border-primary/50 hover:bg-accent/60",
+        ghost: "border-transparent text-foreground hover:bg-accent/70",
         link: "text-primary underline-offset-4 hover:underline",
         brand:
-          "border border-brand text-brand hover:bg-brand/10 focus-visible:ring-[color:var(--brand)]/50",
+          "border-primary/35 bg-primary/10 text-primary hover:border-primary/55 hover:bg-primary/16",
       },
       size: {
-        default: "h-10 px-6 py-2",
-        sm: "h-9 px-4",
-        lg: "h-11 px-8",
-        icon: "h-9 w-9 p-0",
+        default: "h-11 px-6",
+        sm: "h-10 px-4",
+        lg: "h-12 px-7 text-base",
+        icon: "size-10 p-0",
       },
     },
     defaultVariants: {

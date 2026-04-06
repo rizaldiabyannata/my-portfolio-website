@@ -1,160 +1,220 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+
+import { Button } from "@/components/ui/button";
+import { generateSlugFromTitle } from "@/lib/slugs";
+import { motion, useReducedMotion } from "motion/react";
 import Link from "next/link";
+import { ArrowUpRight, ExternalLink, Github } from "lucide-react";
 import { PROJECTS_DATA } from "../../../constants";
+import Reveal from "./Reveal";
 import SectionTitle from "./SectionTitle";
-import {
-  FolderIcon,
-  GithubIcon,
-  ExternalLinkIcon,
-} from "../../components/icons/UtilityIcons";
-import {
-  Card,
-  CardHeader,
-  CardContent,
-  CardFooter,
-  CardTitle,
-} from "@/components/ui/card";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-function generateSlugFromTitle(title: string): string {
-  return title
-    .toLowerCase()
-    .replace(/[^a-z0-9\s-]/g, "")
-    .replace(/\s+/g, "-")
-    .replace(/-+/g, "-")
-    .trim();
-}
-
-gsap.registerPlugin(ScrollTrigger);
-
-const Projects: React.FC = () => {
-  const sectionRef = useRef<HTMLElement | null>(null);
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    const timeout = setTimeout(() => setIsMounted(true), 200);
-    return () => clearTimeout(timeout);
-  }, []);
-
-  useEffect(() => {
-    if (!isMounted) return;
-
-    const el = sectionRef.current;
-    if (!el) return;
-
-    const title = el.querySelector(".section-title");
-    const projectCards = gsap.utils.toArray<HTMLElement>(".project-card");
-
-    gsap.set(projectCards, { autoAlpha: 0, y: 20 });
-
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: el,
-        start: "top 70%",
-        toggleActions: "play none none none",
-      },
-    });
-
-    if (title) {
-      tl.from(title, {
-        opacity: 0,
-        y: -50,
-        duration: 1,
-        ease: "power3.out",
-      });
-    }
-
-    tl.to(
-      projectCards,
-      {
-        autoAlpha: 1,
-        y: 0,
-        stagger: 0.2,
-        duration: 0.8,
-        ease: "power3.out",
-      },
-      "-=0.5"
-    );
-
-    projectCards.forEach((card) => {
-      card.addEventListener("mouseenter", () => {
-        gsap.to(card, { y: -10, duration: 0.3, ease: "power2.out" });
-      });
-      card.addEventListener("mouseleave", () => {
-        gsap.to(card, { y: 0, duration: 0.3, ease: "power2.out" });
-      });
-    });
-  }, [isMounted]);
+const Projects = () => {
+  const prefersReducedMotion = useReducedMotion();
+  const featuredProject =
+    PROJECTS_DATA.find((project) => project.featured) ?? PROJECTS_DATA[0];
+  const supportingProjects = PROJECTS_DATA.filter(
+    (project) => project.title !== featuredProject.title
+  );
 
   return (
-    <section id="projects" ref={sectionRef} className="py-24">
-      <div className="section-title">
-        <SectionTitle number="3" title="Things I've Built" />
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {PROJECTS_DATA.map((project) => (
-          <Card
-            key={project.title}
-            className="project-card flex flex-col justify-between p-0"
-          >
-            <div>
-              <CardHeader className="mb-2">
-                <div className="text-brand w-10 h-10">
-                  <FolderIcon />
+    <section id="projects" className="py-24">
+      <SectionTitle
+        index="03"
+        title="Selected work with clear delivery context."
+        description="Each project shows the kind of problems I have handled so far: system design, backend implementation, product-facing delivery, and team execution."
+      />
+
+      <div className="grid gap-6">
+        <Reveal className="surface-panel overflow-hidden p-6 sm:p-8">
+          <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+            <div className="space-y-6">
+              <div className="flex flex-wrap items-center gap-3">
+                <span className="label-chip">Featured case study</span>
+                {featuredProject.status ? (
+                  <span className="rounded-full border border-primary/20 bg-primary/10 px-3 py-1.5 text-sm text-primary">
+                    {featuredProject.status}
+                  </span>
+                ) : null}
+              </div>
+
+              <div className="space-y-4">
+                <h3 className="font-heading text-3xl font-semibold text-foreground sm:text-4xl">
+                  {featuredProject.title}
+                </h3>
+                <p className="max-w-2xl text-base leading-7 text-muted-foreground sm:text-lg">
+                  {featuredProject.summary}
+                </p>
+              </div>
+
+              <div className="grid gap-4 sm:grid-cols-3">
+                <div className="rounded-[1.2rem] border border-border/70 bg-background/45 p-4">
+                  <p className="font-mono text-[0.68rem] uppercase tracking-[0.22em] text-primary/75">
+                    Role
+                  </p>
+                  <p className="mt-2 text-sm text-foreground sm:text-base">
+                    {featuredProject.role ?? "Contributor"}
+                  </p>
                 </div>
-                <div className="flex items-center space-x-4">
+                <div className="rounded-[1.2rem] border border-border/70 bg-background/45 p-4">
+                  <p className="font-mono text-[0.68rem] uppercase tracking-[0.22em] text-primary/75">
+                    Focus
+                  </p>
+                  <p className="mt-2 text-sm text-foreground sm:text-base">
+                    Full-stack product flow
+                  </p>
+                </div>
+                <div className="rounded-[1.2rem] border border-border/70 bg-background/45 p-4">
+                  <p className="font-mono text-[0.68rem] uppercase tracking-[0.22em] text-primary/75">
+                    Surface
+                  </p>
+                  <p className="mt-2 text-sm text-foreground sm:text-base">
+                    Customer and admin experience
+                  </p>
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                {featuredProject.highlights.map((highlight, index) => (
+                  <div
+                    key={highlight}
+                    className="flex gap-4 rounded-[1.2rem] border border-border/70 bg-background/40 px-4 py-4"
+                  >
+                    <span className="font-mono text-sm text-primary/80">
+                      0{index + 1}
+                    </span>
+                    <p className="text-sm leading-6 text-muted-foreground sm:text-base">
+                      {highlight}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-5">
+              <div className="rounded-[1.4rem] border border-border/70 bg-background/40 p-5">
+                <p className="font-mono text-[0.68rem] uppercase tracking-[0.22em] text-primary/75">
+                  Stack
+                </p>
+                <div className="mt-4 flex flex-wrap gap-2.5">
+                  {featuredProject.tags.map((tag) => (
+                    <span key={tag} className="label-chip">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="flex flex-wrap gap-3">
+                <Button asChild size="lg">
+                  <Link
+                    href={`/projects/${generateSlugFromTitle(
+                      featuredProject.title
+                    )}`}
+                  >
+                    Read case study
+                    <ArrowUpRight className="ml-2 size-4" />
+                  </Link>
+                </Button>
+                <Button asChild variant="outline" size="lg">
                   <a
-                    href={project.repoUrl}
+                    href={featuredProject.repoUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-muted-foreground hover:text-brand transition-colors duration-300 w-6 h-6"
                   >
-                    <GithubIcon />
+                    Repository
+                    <Github className="ml-2 size-4" />
                   </a>
-                  {project.liveUrl && (
+                </Button>
+                {featuredProject.demoUrl || featuredProject.liveUrl ? (
+                  <Button asChild variant="secondary" size="lg">
                     <a
-                      href={project.liveUrl}
+                      href={featuredProject.demoUrl || featuredProject.liveUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-muted-foreground hover:text-brand transition-colors duration-300 w-6 h-6"
                     >
-                      <ExternalLinkIcon />
+                      Live preview
+                      <ExternalLink className="ml-2 size-4" />
                     </a>
-                  )}
-                </div>
-              </CardHeader>
-              <CardContent>
-                <Link
-                  href={`/projects/${generateSlugFromTitle(project.title)}`}
-                >
-                  <CardTitle className="text-xl mb-3 hover:text-brand transition-colors duration-300 cursor-pointer">
-                    {project.title}
-                  </CardTitle>
-                </Link>
-                <p className="text-muted-foreground text-base mb-6 line-clamp-3">
-                  {project.description}
-                </p>
-                <Link
-                  href={`/projects/${generateSlugFromTitle(project.title)}`}
-                  className="text-brand hover:text-accent text-sm font-medium transition-colors inline-flex items-center gap-1"
-                >
-                  View Details →
-                </Link>
-              </CardContent>
+                  </Button>
+                ) : null}
+              </div>
             </div>
-            <CardFooter>
-              <ul className="flex flex-wrap font-mono text-sm text-muted-foreground">
-                {project.tags.map((tag) => (
-                  <li key={tag} className="mr-4 mb-2">
-                    {tag}
-                  </li>
-                ))}
-              </ul>
-            </CardFooter>
-          </Card>
-        ))}
+          </div>
+        </Reveal>
+
+        <div className="grid gap-6 lg:grid-cols-3">
+          {supportingProjects.map((project, index) => (
+            <Reveal
+              key={project.title}
+              delay={index * 0.06}
+              className="h-full"
+            >
+              <motion.article
+                whileHover={prefersReducedMotion ? undefined : { y: -4 }}
+                transition={{ duration: 0.2, ease: "easeOut" }}
+                className="surface-panel flex h-full flex-col justify-between p-6"
+              >
+                <div className="space-y-5">
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      {project.status ? (
+                        <span className="label-chip">{project.status}</span>
+                      ) : null}
+                    </div>
+                    <a
+                      href={project.repoUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex size-10 items-center justify-center rounded-full border border-border/70 bg-background/45 text-muted-foreground transition-colors hover:border-primary/40 hover:text-primary"
+                      aria-label={`Open ${project.title} repository`}
+                    >
+                      <Github className="size-4" />
+                    </a>
+                  </div>
+
+                  <div className="space-y-3">
+                    <h3 className="font-heading text-2xl font-semibold text-foreground">
+                      {project.title}
+                    </h3>
+                    <p className="text-sm leading-6 text-muted-foreground sm:text-base">
+                      {project.summary}
+                    </p>
+                  </div>
+
+                  <div className="space-y-3">
+                    {project.highlights.slice(0, 2).map((highlight) => (
+                      <p
+                        key={highlight}
+                        className="rounded-[1rem] border border-border/70 bg-background/40 px-3.5 py-3 text-sm leading-6 text-muted-foreground"
+                      >
+                        {highlight}
+                      </p>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="mt-6 space-y-4">
+                  <div className="flex flex-wrap gap-2">
+                    {project.tags.map((tag) => (
+                      <span key={tag} className="label-chip">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+
+                  <Link
+                    href={`/projects/${generateSlugFromTitle(project.title)}`}
+                    className="inline-flex items-center gap-2 text-sm font-medium text-primary"
+                  >
+                    Read the breakdown
+                    <ArrowUpRight className="size-4" />
+                  </Link>
+                </div>
+              </motion.article>
+            </Reveal>
+          ))}
+        </div>
       </div>
     </section>
   );

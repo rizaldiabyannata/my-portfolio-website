@@ -1,69 +1,59 @@
-"use client";
-import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ArrowRight, Download, Mail } from "lucide-react";
+import { SITE_CONTENT } from "../../../constants";
+import Reveal from "./Reveal";
+import SectionTitle from "./SectionTitle";
 
-gsap.registerPlugin(ScrollTrigger);
-
-const Contact: React.FC = () => {
-  const sectionRef = useRef<HTMLElement | null>(null);
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    const timeout = setTimeout(() => setIsMounted(true), 200);
-    return () => clearTimeout(timeout);
-  }, []);
-
-  useEffect(() => {
-    if (!isMounted) return;
-
-    const el = sectionRef.current;
-    if (!el) return;
-
-    const children = gsap.utils.toArray<HTMLElement>(el.children);
-
-    gsap.set(children, { autoAlpha: 0, y: 20 });
-
-    gsap.to(children, {
-      scrollTrigger: {
-        trigger: el,
-        start: "top 80%",
-        toggleActions: "play none none none",
-      },
-      autoAlpha: 1,
-      y: 0,
-      stagger: 0.2,
-      duration: 0.8,
-      ease: "power3.out",
-    });
-  }, [isMounted]);
-
+const Contact = () => {
   return (
-    <section
-      id="contact"
-      ref={sectionRef}
-      className="py-24 text-center max-w-2xl mx-auto"
-    >
-      <h2 className="text-brand font-mono text-lg mb-4">
-        04. What&apos;s Next?
-      </h2>
-      <h3 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-        Get In Touch
-      </h3>
-      <p className="text-muted-foreground text-lg mb-10">
-        I&apos;m actively seeking new opportunities and collaborations. My inbox
-        is always open. Whether you have a question or just want to connect,
-        feel free to reach out!
-      </p>
-      <Button
-        asChild
-        variant="brand"
-        size="lg"
-        className="btn-glow font-mono text-lg px-8 py-4"
-      >
-        <a href="mailto:mail@rizaldiabyannata.dev">Say Hello</a>
-      </Button>
+    <section id="contact" className="py-24">
+      <Reveal className="surface-panel overflow-hidden p-6 sm:p-8 lg:p-10">
+        <div className="grid gap-8 lg:grid-cols-[0.92fr_1.08fr] lg:items-end">
+          <div>
+            <SectionTitle
+              index="05"
+              title={SITE_CONTENT.contactTitle}
+              description={SITE_CONTENT.contactDescription}
+              className="mb-0"
+            />
+          </div>
+
+          <div className="space-y-5">
+            <div className="rounded-[1.3rem] border border-border/70 bg-background/45 p-5">
+              <p className="font-mono text-[0.68rem] uppercase tracking-[0.22em] text-primary/75">
+                Preferred conversation
+              </p>
+              <p className="mt-3 text-base leading-7 text-foreground">
+                Product teams, freelance projects, or internship roles that need
+                dependable backend execution and practical delivery support.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap gap-3">
+              <Button asChild size="lg">
+                <a href={`mailto:${SITE_CONTENT.email}`}>
+                  Say hello
+                  <Mail className="ml-2 size-4" />
+                </a>
+              </Button>
+              <Button asChild variant="outline" size="lg">
+                <a href="/resume.pdf" target="_blank" rel="noopener noreferrer">
+                  Resume
+                  <Download className="ml-2 size-4" />
+                </a>
+              </Button>
+            </div>
+
+            <a
+              href={`mailto:${SITE_CONTENT.email}`}
+              className="inline-flex items-center gap-2 text-sm font-medium text-primary"
+            >
+              {SITE_CONTENT.email}
+              <ArrowRight className="size-4" />
+            </a>
+          </div>
+        </div>
+      </Reveal>
     </section>
   );
 };

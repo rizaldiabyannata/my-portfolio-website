@@ -8,7 +8,7 @@ export function Card({ className, ...props }: CardProps) {
   return (
     <div
       className={cn(
-        "rounded-lg border border-border bg-card/60 backdrop-blur-sm shadow-sm transition-shadow hover:shadow-lg",
+        "rounded-[1.5rem] border border-border/80 bg-card/80 shadow-xl shadow-black/5 backdrop-blur-sm transition-[border-color,transform,box-shadow] duration-200 ease-out dark:shadow-black/30",
         className
       )}
       {...props}
@@ -22,7 +22,7 @@ export function CardHeader({
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={cn("p-4 flex items-start justify-between", className)}
+      className={cn("p-6 flex items-start justify-between gap-4", className)}
       {...props}
     />
   );
@@ -41,7 +41,7 @@ export function CardContent({
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={cn("px-4 pb-4 text-muted-foreground", className)}
+      className={cn("px-6 pb-6 text-muted-foreground", className)}
       {...props}
     />
   );
@@ -50,5 +50,5 @@ export function CardFooter({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn("px-4 pb-4", className)} {...props} />;
+  return <div className={cn("px-6 pb-6", className)} {...props} />;
 }

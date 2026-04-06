@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
+import { generateSlugFromTitle } from './slugs';
 
 const postsDirectory = path.join(process.cwd(), 'content/blog');
 
@@ -68,11 +69,4 @@ export function getPostBySlug(slug: string) {
   };
 }
 
-export function generateSlugFromTitle(title: string): string {
-  return title
-    .toLowerCase()
-    .replace(/[^a-z0-9\s-]/g, '')
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-')
-    .trim();
-}
+export { generateSlugFromTitle };

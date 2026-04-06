@@ -1,6 +1,6 @@
-import { notFound } from "next/navigation";
-import Link from "next/link";
 import { getAllPosts, getPostBySlug } from "@/lib/blog";
+import Link from "next/link";
+import { notFound } from "next/navigation";
 import { ArrowLeft, Calendar, Clock, User } from "lucide-react";
 import "highlight.js/styles/github-dark.css";
 
@@ -17,6 +17,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
+
   try {
     const post = getPostBySlug(slug);
     return {
@@ -47,62 +48,72 @@ export default async function BlogPostPage({
   const MDXContent = (await import(`@/../../content/blog/${slug}.mdx`)).default;
 
   return (
-    <div className="min-h-screen bg-[var(--color-background)] py-20 px-4">
-      <article className="max-w-4xl mx-auto">
+    <div className="min-h-screen px-4 pb-16 pt-32 sm:px-6 lg:px-10">
+      <article className="mx-auto max-w-5xl">
         <Link
           href="/blog"
-          className="inline-flex items-center gap-2 text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] transition-colors mb-8"
+          className="mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-primary"
         >
           <ArrowLeft size={20} />
-          <span>Back to Blog</span>
+          <span>Back to archive</span>
         </Link>
 
-        <header className="mb-8 pb-8 border-b border-[var(--color-border)]">
-          <h1 className="text-4xl md:text-5xl font-bold text-[var(--color-text)] mb-4">
-            {post.title}
-          </h1>
+        <header className="surface-panel mb-6 p-6 sm:p-8 lg:p-10">
+          <div className="space-y-6">
+            <span className="label-chip">Technical note</span>
 
-          <div className="flex flex-wrap items-center gap-4 text-sm text-[var(--color-text-secondary)] mb-4">
-            <span className="flex items-center gap-1">
-              <Calendar size={16} />
-              {new Date(post.date).toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
-            </span>
-
-            {post.readTime && (
-              <span className="flex items-center gap-1">
-                <Clock size={16} />
-                {post.readTime}
-              </span>
-            )}
-
-            {post.author && (
-              <span className="flex items-center gap-1">
-                <User size={16} />
-                {post.author}
-              </span>
-            )}
-          </div>
-
-          {post.tags && post.tags.length > 0 && (
-            <div className="flex flex-wrap gap-2">
-              {post.tags.map((tag: string) => (
-                <span
-                  key={tag}
-                  className="px-3 py-1 text-xs rounded-full bg-[var(--color-primary)]/10 text-[var(--color-primary)] border border-[var(--color-primary)]/20"
-                >
-                  {tag}
-                </span>
-              ))}
+            <div className="space-y-4">
+              <h1 className="font-heading text-4xl font-semibold text-foreground md:text-6xl">
+                {post.title}
+              </h1>
+              {post.excerpt ? (
+                <p className="max-w-3xl text-lg leading-8 text-muted-foreground">
+                  {post.excerpt}
+                </p>
+              ) : null}
             </div>
-          )}
+
+            <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+              <span className="flex items-center gap-2">
+                <Calendar size={16} />
+                {new Date(post.date).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+              </span>
+
+              {post.readTime ? (
+                <span className="flex items-center gap-2">
+                  <Clock size={16} />
+                  {post.readTime}
+                </span>
+              ) : null}
+
+              {post.author ? (
+                <span className="flex items-center gap-2">
+                  <User size={16} />
+                  {post.author}
+                </span>
+              ) : null}
+            </div>
+
+            {post.tags?.length ? (
+              <div className="flex flex-wrap gap-2">
+                {post.tags.map((tag: string) => (
+                  <span key={tag} className="label-chip">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            ) : null}
+          </div>
         </header>
 
-        <div className="prose prose-lg max-w-none">
-          <MDXContent />
+        <div className="surface-panel p-6 sm:p-8 lg:p-10">
+          <div className="article-prose max-w-none">
+            <MDXContent />
+          </div>
         </div>
       </article>
     </div>
